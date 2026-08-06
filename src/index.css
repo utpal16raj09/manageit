@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* PropPulse PayPal Blue Brand System */
+  --bg: #f8fafc;
+  --ink: #012169;
+  --ink-muted: #64748b;
+  --accent: #003087;       /* Primary PayPal Deep Blue */
+  --accent-bright: #009cde;/* PayPal Cyan Accent */
+  --hairline: #e2e8f0;
+
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  /* Responsive Fluid Tokens */
+  --section-pad: 64px;
+  --text-hero: clamp(32px, 9vw, 56px);
+  --text-h2: clamp(28px, 6vw, 36px);
+  --container-pad-x: 20px;
+
+  /* Motion Easings */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 0.3s;
+  --dur-med: 0.6s;
+  --dur-slow: 1.2s;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --section-pad: 120px;
+    --text-hero: clamp(56px, 7vw, 88px);
+    --text-h2: clamp(36px, 4vw, 48px);
+    --container-pad-x: 40px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --section-pad: 200px;
+    --text-hero: clamp(72px, 6vw, 108px);
+    --text-h2: 56px;
+    --container-pad-x: 0px;
+  }
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg);
+  color: var(--ink);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Clean Editorial Typography & Cards */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono-data {
+  font-family: var(--font-mono);
+}
+
+.card-clean {
+  background-color: #ffffff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(20, 21, 26, 0.04);
+  transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.card-clean:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 20px rgba(36, 84, 255, 0.08);
+}
