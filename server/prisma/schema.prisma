@@ -1,0 +1,153 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  OWNER
+  EXEC_MANAGER
+  SITE_MANAGER
+  TENANT
+}
+
+model User {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  name           String
+  role           UserRole
+  passwordHash   String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  refreshTokens          RefreshToken[]
+  execAssignments        ExecManagerAssignment[] @relation("ExecManager")
+  siteManagerAssignments SiteManagerAssignment[]
+  tenantProfile          Tenant?
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model ExecManagerAssignment {
+  id             String   @id @default(uuid())
+  execManagerId  String
+  siteManagerId  String
+  
+  execManager    User     @relation("ExecManager", fields: [execManagerId], references: [id], onDelete: Cascade)
+  createdAt      DateTime @default(now())
+
+  @@unique([execManagerId, siteManagerId])
+}
+
+model SiteManagerAssignment {
+  id             String   @id @default(uuid())
+  siteManagerId  String
+  locationId     String
+
+  siteManager    User     @relation(fields: [siteManagerId], references: [id], onDelete: Cascade)
+  location       Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime @default(now())
+
+  @@unique([siteManagerId, locationId])
+}
+
+model Location {
+  id          String   @id @default(uuid())
+  name        String
+  address     String
+  city        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  assignments SiteManagerAssignment[]
+  roomTypes   RoomType[]
+  rooms       Room[]
+  pricingOverrides LocationRoomPricing[]
+}
+
+model RoomType {
+  id          String   @id @default(uuid())
+  name        String
+  locationId  String
+  location    Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  basePrice   Float
+
+  rooms             Room[]
+  pricingOverrides  LocationRoomPricing[]
+}
+
+model LocationRoomPricing {
+  id          String   @id @default(uuid())
+  locationId  String
+  location    Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  roomTypeId  String
+  roomType    RoomType @relation(fields: [roomTypeId], references: [id], onDelete: Cascade)
+  overridePrice Float
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([locationId, roomTypeId])
+}
+
+model Room {
+  id          String   @id @default(uuid())
+  roomNumber  String
+  locationId  String
+  location    Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  roomTypeId  String
+  roomType    RoomType @relation(fields: [roomTypeId], references: [id], onDelete: Restrict)
+
+  beds        Bed[]
+}
+
+model Bed {
+  id          String   @id @default(uuid())
+  bedNumber   String
+  roomId      String
+  room        Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  status      String   @default("VACANT")
+
+  tenant      Tenant?
+}
+
+model Tenant {
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bedId          String?  @unique
+  bed            Bed?     @relation(fields: [bedId], references: [id], onDelete: SetNull)
+  
+  phone          String?
+  kycVerified    Boolean  @default(false)
+  kycDocType     String?
+  kycDocUrl      String?
+  
+  leaseStart     DateTime?
+  leaseEnd       DateTime?
+  depositAmount  Float    @default(0)
+  monthlyRent    Float    @default(0)
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Target {
+  id             String   @id @default(uuid())
+  siteManagerId  String
+  metricType     String
+  targetValue    Float
+  period         String
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
