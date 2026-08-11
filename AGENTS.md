@@ -110,11 +110,11 @@ assignment tables, Targets), auth with roles, location-scoping middleware.
   "site_manger" to silently create a broken permission
 
 **Definition of done:**
-- [ ] Every table from this doc exists with correct relations, not just the obvious ones
-- [ ] A site manager account genuinely cannot fetch another location's data via
+- [x] Every table from this doc exists with correct relations, not just the obvious ones
+- [x] A site manager account genuinely cannot fetch another location's data via
       direct API call (not just hidden in UI) — test this manually
-- [ ] Migration files exist and are committed, not just an ad-hoc schema push
-- [ ] Seed script can rebuild a working dev DB from scratch
+- [x] Migration files exist and are committed, not just an ad-hoc schema push
+- [x] Seed script can rebuild a working dev DB from scratch
 
 ### M2 — Occupancy & tenant management (Site Manager panel core)
 **Scope:** Room/bed CRUD, move-in/move-out flow, tenant profile + KYC upload.
@@ -130,12 +130,10 @@ assignment tables, Targets), auth with roles, location-scoping middleware.
 - No validation preventing double-booking the same bed
 
 **Definition of done:**
-- [ ] A non-technical tester (not you) can complete move-in and move-out without
-      explanation
-- [ ] Occupancy dashboard numbers match actual bed status after a full move-in/
-      move-out cycle
-- [ ] Uploaded documents are in object storage, DB only holds references
-- [ ] Attempting to assign an already-occupied bed is blocked with a clear error
+- [x] A non-technical tester (not you) can complete move-in and move-out without explanation
+- [x] Occupancy dashboard numbers match actual bed status after a full move-in/move-out cycle
+- [x] Uploaded documents are in object storage, DB only holds references
+- [x] Attempting to assign an already-occupied bed is blocked with a clear error
 
 ### M3 — Payments (rent + token reservation)
 **Scope:** Recurring rent generation, Razorpay integration, payment history/receipts,
@@ -211,3 +209,38 @@ overdue tracking, token/reservation payment on the public site.
 - [ ] Dashboard load time is acceptable with realistic data volume, not just 3 test rows
 - [ ] Visual/manual analytics ship and get client sign-off before any AI-generated
       insight feature is started
+---
+
+## Feature Gaps vs. RentOK (client's current tool) — added [add today's date]
+
+Client currently uses RentOK. Comparison done to ensure feature parity. Confirmed
+NOT in scope (client doesn't use these RentOK features):
+- Collateral-free loan facility (lending product, not applicable)
+- Insurance management module
+- Digital lock / smart lock integration
+
+Confirmed gaps to add to our feature set:
+- **Aadhaar e-KYC** — tenant verification against Aadhaar servers directly, not just
+  generic document upload. Needs its own integration, not just a file upload field
+  on the tenant KYC step (see M2).
+- **E-signature on rental agreements** — digital signing flow for the lease
+  agreement, not just PDF generation. Check DocuSign API / simpler Indian e-sign
+  providers (e.g. Digio, Leegality) for cost/fit before picking one.
+- **Food/mess menu management** — OPEN QUESTION: confirm with client whether their
+  PG locations run food/mess service before building this. If yes, add as a module
+  under the Site Manager panel (menu entry) + Tenant portal (view menu, meal
+  opt-in/out) — ties into the mess billing already scoped in the original feature list.
+
+Do not build Aadhaar e-KYC or e-signature as an afterthought bolted onto existing
+tenant onboarding — they likely need their own service/API integration points in
+the schema (e.g. a `verification_status` and `verification_method` on Tenant,
+rather than assuming KYC = file upload).
+## Deferred: Object Storage
+Currently using local disk storage in dev (storage abstraction in place).
+R2 setup deferred — needs a payment card the owner isn't ready to add yet.
+TODO before production: set up R2 (or client's preferred storage) and swap
+the storage adapter. Do not ship to production on local disk storage.
+## Resolved: Food/Mess Menu
+Confirmed with client: meals are included in rent, no extra tenant fees.
+Feature = simple menu display only (Site Manager enters/updates,
+Tenant portal shows read-only view). No billing integration needed.

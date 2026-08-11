@@ -7,7 +7,8 @@ import {
   ScribbleQR
 } from './ScribbleIcons';
 import { X, Receipt, CheckCircle2 } from 'lucide-react';
-import { Expense } from '../types/property';
+import { Expense, Unit } from '../types/property';
+import { KYCUpload } from './KYCUpload';
 
 export const QuickAddSheet: React.FC = () => {
   const {
@@ -17,7 +18,8 @@ export const QuickAddSheet: React.FC = () => {
     addTenant,
     addBulkExpense,
     addBulkDues,
-    setIsTenantQROpen
+    setIsTenantQROpen,
+    units
   } = useProperty();
 
   const [activeSubTab, setActiveSubTab] = useState<'tenant' | 'expense' | 'dues'>('tenant');
@@ -28,6 +30,10 @@ export const QuickAddSheet: React.FC = () => {
   const [tenantPhone, setTenantPhone] = useState('');
   const [tenantUnit, setTenantUnit] = useState('');
   const [tenantRent, setTenantRent] = useState('14000');
+  const [tenantEmail, setTenantEmail] = useState('');
+  const [emgName, setEmgName] = useState('');
+  const [emgPhone, setEmgPhone] = useState('');
+  const [kycDocUrl, setKycDocUrl] = useState('');
 
   // Form States - Bulk Expense
   const [expCategory, setExpCategory] = useState<Expense['category']>('Maintenance');
@@ -55,18 +61,22 @@ export const QuickAddSheet: React.FC = () => {
       unitNumber: tenantUnit || 'Room 101',
       name: tenantName,
       phone: tenantPhone || '+91 9876543210',
-      email: `${tenantName.toLowerCase().replace(/\s+/g, '.')}@example.com`,
+      email: tenantEmail || `${tenantName.toLowerCase().replace(/\s+/g, '.')}@example.com`,
       monthlyRent: rentNum,
       depositAmount: rentNum * 2,
       leaseStart: new Date().toISOString().split('T')[0],
       leaseEnd: new Date(Date.now() + 365 * 24 * 3600 * 1000).toISOString().split('T')[0],
       joinedDate: new Date().toISOString().split('T')[0],
-      kycVerified: true,
-      avatarUrl: `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80`
+      kycVerified: !!kycDocUrl,
+      avatarUrl: `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80`,
+      emergencyContactName: emgName || 'NA',
+      emergencyContactPhone: emgPhone || 'NA',
+      kycDocUrl: kycDocUrl || ''
     });
 
     setIsQuickAddOpen(false);
     setTenantName('');
+    setKycDocUrl('');
   };
 
   const handleBulkExpenseSubmit = (e: React.FormEvent) => {
@@ -226,14 +236,17 @@ export const QuickAddSheet: React.FC = () => {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block font-extrabold text-[#012169] mb-1">Unit / Flat No.</label>
-                <input
-                  type="text"
-                  placeholder="Room 105"
+                <label className="block font-extrabold text-[#012169] mb-1">Select Unit / Bed</label>
+                <select
                   value={tenantUnit}
                   onChange={e => setTenantUnit(e.target.value)}
                   className="w-full bg-[#f8fafc] border border-slate-300 rounded-xl p-2.5 font-bold focus:border-[#009cde]"
-                />
+                >
+                  <option value="">Select Bed...</option>
+                  {units.filter(u => u.propertyId === tenantPropId && u.status === 'vacant').map(u => (
+                    <option key={u.id} value={u.id}>{u.unitNumber}</option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label className="block font-extrabold text-[#012169] mb-1">Monthly Rent (₹)</label>
@@ -245,6 +258,38 @@ export const QuickAddSheet: React.FC = () => {
                   className="w-full bg-[#f8fafc] border border-slate-300 rounded-xl p-2.5 font-bold focus:border-[#009cde]"
                 />
               </div>
+            </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block font-extrabold text-[#012169] mb-1">Emergency Name</label>
+                <input
+                  type="text"
+                  placeholder="Guardian Name"
+                  value={emgName}
+                  onChange={e => setEmgName(e.target.value)}
+                  className="w-full bg-[#f8fafc] border border-slate-300 rounded-xl p-2.5 font-bold focus:border-[#009cde]"
+                />
+              </div>
+              <div>
+                <label className="block font-extrabold text-[#012169] mb-1">Emergency Phone</label>
+                <input
+                  type="text"
+                  placeholder="+91..."
+                  value={emgPhone}
+                  onChange={e => setEmgPhone(e.target.value)}
+                  className="w-full bg-[#f8fafc] border border-slate-300 rounded-xl p-2.5 font-bold focus:border-[#009cde]"
+                />
+              </div>
+            </div>
+
+            <div className="mt-2">
+              <KYCUpload 
+                onUploadSuccess={(url) => setKycDocUrl(url)} 
+                tenantId="new" 
+              />
+              {kycDocUrl && <p className="text-emerald-600 text-[10px] mt-1 font-bold">Document attached successfully</p>}
             </div>
 
             <button

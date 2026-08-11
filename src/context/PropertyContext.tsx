@@ -78,7 +78,7 @@ interface PropertyContextType {
 
   // Actions
   recordPayment: (payment: Omit<Payment, 'id' | 'receiptNumber'>) => void;
-  addTenant: (tenantData: Omit<Tenant, 'id' | 'duesStatus' | 'outstandingDueAmount'>) => void;
+  addTenant: (tenantData: Omit<Tenant, 'id' | 'duesStatus' | 'outstandingDueAmount'> & { emergencyContactName: string; emergencyContactPhone: string; kycDocUrl: string }) => void;
   addComplaint: (complaintData: Omit<Complaint, 'id' | 'createdAt' | 'status'>) => void;
   updateComplaintStatus: (id: string, status: Complaint['status']) => void;
   addExpense: (expense: Omit<Expense, 'id' | 'propertyName'>) => void;
@@ -106,8 +106,8 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const [isOffline, setIsOffline] = useState(false);
 
-  // Entities
-  const [properties, setProperties] = useState<Property[]>(INITIAL_PROPERTIES);
+  // Entities (Initialized empty/mock, will be hydrated by DB)
+  const [properties, setProperties] = useState<Property[]>([]);
   const [units, setUnits] = useState<Unit[]>(INITIAL_UNITS);
   const [tenants, setTenants] = useState<Tenant[]>(INITIAL_TENANTS);
   const [complaints, setComplaints] = useState<Complaint[]>(INITIAL_COMPLAINTS);
@@ -115,6 +115,116 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [announcements, setAnnouncements] = useState<Announcement[]>(INITIAL_ANNOUNCEMENTS);
   const [documents] = useState<DocumentVaultItem[]>(INITIAL_DOCUMENTS);
   const [users] = useState<UserRole[]>(INITIAL_USERS);
+  const [authToken, setAuthToken] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    const fetchLiveDbData = async () => {
+      try {
+        // 1. Dev login to get our site manager token
+        const authRes = await fetch('http://localhost:3001/api/auth/dev-login');
+        if (!authRes.ok) throw new Error('Auth failed');
+        const authData = await authRes.json();
+        const token = authData.token;
+        setAuthToken(token);
+
+        // 2. Fetch assigned locations from Postgres via Express API
+        const locRes = await fetch('http://localhost:3001/api/locations', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const liveLocations = await locRes.json();
+        
+        let allUnits: Unit[] = [];
+        let allTenants: Tenant[] = [];
+
+        // 3. Fetch occupancy for each location and map to Frontend expected state
+        const mappedProps: Property[] = await Promise.all(liveLocations.map(async (loc: any) => {
+          const occRes = await fetch(`http://localhost:3001/api/locations/${loc.id}/occupancy`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          
+          if (!occRes.ok) return {
+            id: loc.id, name: loc.name, address: loc.address || loc.city,
+            unitsCount: 0, occupiedUnitsCount: 0, vacantUnitsCount: 0,
+            todayCollection: 0, duesThisMonth: 0, collectedThisMonth: 0, expectedRent: 0,
+            totalDuesAllTime: 0, pendingComplaintsCount: 0, agingBreakdown: { d0_30: 0, d30_60: 0, d60_plus: 0 }
+          };
+
+          const occData = await occRes.json();
+          let unitsCount = 0;
+          let occupiedUnitsCount = 0;
+
+          // Map rooms/beds to units
+          occData.roomTypes?.forEach((rt: any) => {
+            rt.rooms?.forEach((room: any) => {
+              room.beds?.forEach((bed: any) => {
+                unitsCount++;
+                const isOccupied = bed.status === 'OCCUPIED';
+                if (isOccupied) occupiedUnitsCount++;
+
+                allUnits.push({
+                  id: bed.id,
+                  propertyId: loc.id,
+                  unitNumber: bed.bedNumber,
+                  type: rt.name,
+                  status: isOccupied ? 'occupied' : 'vacant',
+                  tenantId: bed.tenant?.id,
+                  tenantName: bed.tenant?.user?.name,
+                  rentAmount: rt.basePrice,
+                  features: []
+                });
+
+                if (bed.tenant) {
+                  allTenants.push({
+                    id: bed.tenant.id,
+                    name: bed.tenant.user?.name || 'Unknown',
+                    phone: bed.tenant.phone || '',
+                    email: bed.tenant.user?.email || '',
+                    propertyId: loc.id,
+                    unitId: bed.id,
+                    moveInDate: bed.tenant.leaseStart?.split('T')[0] || '',
+                    monthlyRent: bed.tenant.monthlyRent,
+                    outstandingDueAmount: 0,
+                    duesStatus: 'paid',
+                    kycVerified: bed.tenant.kycVerified,
+                    avatarUrl: bed.tenant.photoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'
+                  });
+                }
+              });
+            });
+          });
+
+          return {
+            id: loc.id,
+            name: loc.name,
+            address: loc.address || loc.city,
+            unitsCount,
+            occupiedUnitsCount,
+            vacantUnitsCount: unitsCount - occupiedUnitsCount,
+            todayCollection: 0,
+            duesThisMonth: 14000,
+            collectedThisMonth: 0,
+            expectedRent: 14000,
+            totalDuesAllTime: 14000,
+            pendingComplaintsCount: 0,
+            agingBreakdown: { d0_30: 14000, d30_60: 0, d60_plus: 0 }
+          };
+        }));
+
+        setProperties(mappedProps);
+        setUnits(allUnits.length > 0 ? allUnits : INITIAL_UNITS);
+        setTenants(allTenants.length > 0 ? allTenants : INITIAL_TENANTS);
+        
+        if (mappedProps.length > 0) {
+          setSelectedPropertyId(mappedProps[0].id);
+        }
+      } catch (err) {
+        console.error('Failed to fetch from DB API:', err);
+        // Fallback to initial data if backend isn't running yet
+        setProperties(INITIAL_PROPERTIES);
+      }
+    };
+    fetchLiveDbData();
+  }, []);
   
   const [payments, setPayments] = useState<Payment[]>([
     {
@@ -251,40 +361,76 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setSelectedReceiptPayment(newPayment);
   };
 
-  const addTenant = (tenantData: Omit<Tenant, 'id' | 'duesStatus' | 'outstandingDueAmount'>) => {
-    const newTenant: Tenant = {
-      ...tenantData,
-      id: `t-${Date.now()}`,
-      duesStatus: 'paid',
-      outstandingDueAmount: 0
-    };
+  const addTenant = async (tenantData: Omit<Tenant, 'id' | 'duesStatus' | 'outstandingDueAmount'> & { emergencyContactName: string; emergencyContactPhone: string; kycDocUrl: string }) => {
+    try {
+      if (authToken) {
+        const res = await fetch('http://localhost:3001/api/tenants/move-in', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({
+            locationId: tenantData.propertyId,
+            bedId: tenantData.unitId,
+            email: tenantData.email,
+            name: tenantData.name,
+            phone: tenantData.phone,
+            depositAmount: tenantData.depositAmount,
+            monthlyRent: tenantData.monthlyRent,
+            leaseStart: tenantData.moveInDate,
+            leaseEnd: '2027-08-01',
+            emergencyContactName: tenantData.emergencyContactName,
+            emergencyContactPhone: tenantData.emergencyContactPhone,
+            kycDocUrl: tenantData.kycDocUrl
+          })
+        });
 
-    setTenants(prev => [newTenant, ...prev]);
-
-    // Update Unit status
-    setUnits(prev => prev.map(u => {
-      if (u.id === tenantData.unitId) {
-        return {
-          ...u,
-          status: 'occupied',
-          tenantId: newTenant.id,
-          tenantName: newTenant.name
-        };
+        if (res.status === 409) {
+          alert('Error: Bed is already occupied! Double booking prevented by Postgres.');
+          return;
+        }
+        if (!res.ok) throw new Error('Failed to move in via DB');
       }
-      return u;
-    }));
 
-    // Update Property counters
-    setProperties(prev => prev.map(p => {
-      if (p.id === tenantData.propertyId) {
-        return {
-          ...p,
-          occupiedUnitsCount: p.occupiedUnitsCount + 1,
-          vacantUnitsCount: Math.max(0, p.vacantUnitsCount - 1)
-        };
-      }
-      return p;
-    }));
+      // Optimistically update UI
+      const newTenant: Tenant = {
+        ...tenantData,
+        id: `t-${Date.now()}`,
+        duesStatus: 'paid',
+        outstandingDueAmount: 0
+      };
+
+      setTenants(prev => [newTenant, ...prev]);
+
+      // Update Unit status
+      setUnits(prev => prev.map(u => {
+        if (u.id === tenantData.unitId) {
+          return {
+            ...u,
+            status: 'occupied',
+            tenantId: newTenant.id,
+            tenantName: newTenant.name
+          };
+        }
+        return u;
+      }));
+
+      // Update Property counters
+      setProperties(prev => prev.map(p => {
+        if (p.id === tenantData.propertyId) {
+          return {
+            ...p,
+            occupiedUnitsCount: p.occupiedUnitsCount + 1,
+            vacantUnitsCount: Math.max(0, p.vacantUnitsCount - 1)
+          };
+        }
+        return p;
+      }));
+    } catch (err) {
+      console.error(err);
+      alert('Failed to connect to backend.');
+    }
   };
 
   const addComplaint = (complaintData: Omit<Complaint, 'id' | 'createdAt' | 'status'>) => {
