@@ -146,6 +146,8 @@ model Tenant {
   
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+  
+  invoices       Invoice[]
 }
 
 model Target {
@@ -172,4 +174,45 @@ model FoodMenu {
   updatedAt   DateTime @updatedAt
 
   @@unique([locationId, dayOfWeek])
+}
+
+enum InvoiceStatus {
+  UNPAID
+  PARTIAL
+  PAID
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+model Invoice {
+  id          String        @id @default(uuid())
+  tenantId    String
+  tenant      Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  amountDue   Float
+  amountPaid  Float         @default(0)
+  dueDate     DateTime
+  status      InvoiceStatus @default(UNPAID)
+  
+  payments    Payment[]
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Payment {
+  id                String        @id @default(uuid())
+  invoiceId         String?       // Optional for token payments
+  invoice           Invoice?      @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  razorpayOrderId   String?       @unique
+  razorpayPaymentId String?       @unique
+  amount            Float
+  status            PaymentStatus @default(PENDING)
+  idempotencyKey    String?       @unique
+
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 }
