@@ -4,18 +4,26 @@ import { ScribbleBell } from './ScribbleIcons';
 import { X, CheckCircle2 } from 'lucide-react';
 
 export const NotificationsModal: React.FC = () => {
-  const { isNotificationsOpen, setIsNotificationsOpen, payments, complaints } = useProperty();
+  const { isNotificationsOpen, setIsNotificationsOpen, payments, complaints, activeRole } = useProperty();
 
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
 
   if (!isNotificationsOpen) return null;
 
-  const mockNotifications = [
+  const ownerNotifications = [
     { id: '1', title: 'Payment Received', desc: `₹14,000 via UPI from Aarav Sharma (Room 101-A)`, time: '10 mins ago', type: 'payment', unread: true },
     { id: '2', title: 'New Ticket Raised', desc: `Plumbing issue reported by Rohan Verma in Sunrise PG`, time: '1 hour ago', type: 'complaint', unread: true },
     { id: '3', title: 'Payment Received', desc: `₹40,000 via NEFT from Siddharth Rao (Flat 101)`, time: '3 hours ago', type: 'payment', unread: false },
     { id: '4', title: 'System Backup', desc: `Local offline vault database encrypted & synced successfully`, time: 'Yesterday', type: 'system', unread: false }
   ];
+
+  const tenantNotifications = [
+    { id: '1', title: 'Rent Due Reminder', desc: `Your rent for September is due on the 1st. Avoid late fees.`, time: '1 day ago', type: 'payment', unread: true },
+    { id: '2', title: 'Water Supply Maintenance', desc: `Water supply will be affected tomorrow between 2 PM to 4 PM.`, time: '2 hours ago', type: 'system', unread: true },
+    { id: '3', title: 'Ticket Updated', desc: `Your ticket "AC not cooling properly" is now In Progress.`, time: '10 mins ago', type: 'complaint', unread: false },
+  ];
+
+  const mockNotifications = activeRole === 'tenant' ? tenantNotifications : ownerNotifications;
 
   const displayedList = filter === 'unread' ? mockNotifications.filter(n => n.unread) : mockNotifications;
 

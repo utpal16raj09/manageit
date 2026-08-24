@@ -17,7 +17,8 @@ export const BottomNav: React.FC = () => {
     setIsTenantQROpen,
     setIsAgingModalOpen,
     setIsNotificationsOpen,
-    filteredMetrics
+    filteredMetrics,
+    activeRole
   } = useProperty();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -40,12 +41,27 @@ export const BottomNav: React.FC = () => {
     };
   }, [isMobileMenuOpen]);
 
-  const primaryNavItems: { id: TabType; label: string; icon: React.FC<{ className?: string; size?: number }>; badge?: number }[] = [
-    { id: 'dashboard', label: 'Home', icon: LayoutDashboard },
-    { id: 'properties', label: 'Properties', icon: ScribbleBuilding },
-    { id: 'complaints', label: 'Tickets', icon: ScribbleComplaint, badge: filteredMetrics.pendingComplaintsCount },
-    { id: 'more', label: 'Financials', icon: ScribbleChart }
-  ];
+  let primaryNavItems: { id: TabType; label: string; icon: React.FC<{ className?: string; size?: number }>; badge?: number }[] = [];
+  
+  if (activeRole === 'tenant') {
+    primaryNavItems = [
+      { id: 'tenant-dashboard', label: 'Home', icon: LayoutDashboard },
+      { id: 'settings', label: 'Settings', icon: Settings }
+    ];
+  } else if (activeRole === 'manager') {
+    primaryNavItems = [
+      { id: 'manager-dashboard', label: 'Operations', icon: LayoutDashboard },
+      { id: 'properties', label: 'Properties', icon: ScribbleBuilding },
+      { id: 'complaints', label: 'Tickets', icon: ScribbleComplaint, badge: filteredMetrics.pendingComplaintsCount }
+    ];
+  } else {
+    primaryNavItems = [
+      { id: 'dashboard', label: 'Home', icon: LayoutDashboard },
+      { id: 'properties', label: 'Properties', icon: ScribbleBuilding },
+      { id: 'complaints', label: 'Tickets', icon: ScribbleComplaint, badge: filteredMetrics.pendingComplaintsCount },
+      { id: 'more', label: 'Financials', icon: ScribbleChart }
+    ];
+  }
 
   return (
     <>
@@ -118,33 +134,37 @@ export const BottomNav: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  setIsTenantQROpen(true);
-                }}
-                className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-[#f8fafc] border border-slate-200 hover:border-[#009cde] transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <ScribbleQR className="w-5 h-5 text-[#009cde]" />
-                  <span className="text-sm font-extrabold text-[#012169]">Tenant QR Onboard</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-slate-400" />
-              </button>
+              {activeRole !== 'tenant' && (
+                <>
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      setIsTenantQROpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-[#f8fafc] border border-slate-200 hover:border-[#009cde] transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <ScribbleQR className="w-5 h-5 text-[#009cde]" />
+                      <span className="text-sm font-extrabold text-[#012169]">Tenant QR Onboard</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-400" />
+                  </button>
 
-              <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  setIsAgingModalOpen(true);
-                }}
-                className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-[#f8fafc] border border-slate-200 hover:border-[#009cde] transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <ScribbleMoney className="w-5 h-5 text-[#009cde]" />
-                  <span className="text-sm font-extrabold text-[#012169]">Aging Dues Radar</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-slate-400" />
-              </button>
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      setIsAgingModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-[#f8fafc] border border-slate-200 hover:border-[#009cde] transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <ScribbleMoney className="w-5 h-5 text-[#009cde]" />
+                      <span className="text-sm font-extrabold text-[#012169]">Aging Dues Radar</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-400" />
+                  </button>
+                </>
+              )}
 
               <button
                 onClick={() => {

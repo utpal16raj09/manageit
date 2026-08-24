@@ -22,7 +22,9 @@ import {
   INITIAL_USERS
 } from '../data/initialData';
 
-export type TabType = 'landing' | 'dashboard' | 'properties' | 'complaints' | 'more' | 'help' | 'settings';
+export type TabType = 'landing' | 'dashboard' | 'manager-dashboard' | 'tenant-dashboard' | 'tenant-payments' | 'tenant-support' | 'tenant-documents' | 'tenant-food' | 'tenant-referrals' | 'tenant-qr' | 'properties' | 'complaints' | 'more' | 'help' | 'settings';
+
+export type RoleType = 'owner' | 'manager' | 'tenant' | null;
 
 interface PropertyContextType {
   // Navigation & Filtering
@@ -30,6 +32,8 @@ interface PropertyContextType {
   setSelectedPropertyId: (id: string) => void;
   activeTab: TabType;
   setActiveTab: (tab: TabType) => void;
+  activeRole: RoleType;
+  setActiveRole: (role: RoleType) => void;
   
   // Modals & Drawers
   isQuickAddOpen: boolean;
@@ -44,6 +48,8 @@ interface PropertyContextType {
   setIsAIChatOpen: (open: boolean) => void;
   selectedReceiptPayment: Payment | null;
   setSelectedReceiptPayment: (payment: Payment | null) => void;
+  isInquiryModalOpen: boolean;
+  setIsInquiryModalOpen: (open: boolean) => void;
   
   // Collections & Lists
   properties: Property[];
@@ -95,7 +101,17 @@ const PropertyContext = createContext<PropertyContextType | undefined>(undefined
 
 export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [selectedPropertyId, setSelectedPropertyId] = useState<string>('all');
-  const [activeTab, setActiveTab] = useState<TabType>('landing');
+  const [activeTab, setActiveTab] = useState<TabType>(() => (localStorage.getItem('activeTab') as TabType) || 'landing');
+  const [activeRole, setActiveRole] = useState<RoleType>(() => (localStorage.getItem('activeRole') as RoleType) || null);
+
+  React.useEffect(() => {
+    localStorage.setItem('activeTab', activeTab);
+  }, [activeTab]);
+
+  React.useEffect(() => {
+    if (activeRole) localStorage.setItem('activeRole', activeRole);
+    else localStorage.removeItem('activeRole');
+  }, [activeRole]);
   
   const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
   const [isTenantQROpen, setIsTenantQROpen] = useState(false);
@@ -103,6 +119,7 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isAIChatOpen, setIsAIChatOpen] = useState(false);
   const [selectedReceiptPayment, setSelectedReceiptPayment] = useState<Payment | null>(null);
+  const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
 
   const [isOffline, setIsOffline] = useState(false);
 
@@ -165,12 +182,10 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                   id: bed.id,
                   propertyId: loc.id,
                   unitNumber: bed.bedNumber,
-                  type: rt.name,
                   status: isOccupied ? 'occupied' : 'vacant',
                   tenantId: bed.tenant?.id,
                   tenantName: bed.tenant?.user?.name,
-                  rentAmount: rt.basePrice,
-                  features: []
+                  rentAmount: rt.basePrice
                 });
 
                 if (bed.tenant) {
@@ -180,13 +195,18 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                     phone: bed.tenant.phone || '',
                     email: bed.tenant.user?.email || '',
                     propertyId: loc.id,
+                    propertyName: loc.name || 'Sunrise PG',
                     unitId: bed.id,
-                    moveInDate: bed.tenant.leaseStart?.split('T')[0] || '',
+                    unitNumber: bed.bedNumber || 'Bed',
+                    leaseStart: bed.tenant.leaseStart?.split('T')[0] || '',
+                    leaseEnd: '2027-08-01',
+                    depositAmount: bed.tenant.depositAmount || bed.tenant.monthlyRent * 2 || 28000,
                     monthlyRent: bed.tenant.monthlyRent,
                     outstandingDueAmount: 0,
                     duesStatus: 'paid',
                     kycVerified: bed.tenant.kycVerified,
-                    avatarUrl: bed.tenant.photoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'
+                    avatarUrl: bed.tenant.photoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+                    joinedDate: bed.tenant.leaseStart?.split('T')[0] || new Date().toISOString().split('T')[0]
                   });
                 }
               });
@@ -218,7 +238,7 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           setSelectedPropertyId(mappedProps[0].id);
         }
       } catch (err) {
-        console.error('Failed to fetch from DB API:', err);
+        // console.error('Failed to fetch from DB API:', err); // Silenced expected error when backend is offline
         // Fallback to initial data if backend isn't running yet
         setProperties(INITIAL_PROPERTIES);
       }
@@ -257,11 +277,35 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   ]);
 
+  // Filter raw collections based on role assignments (Mocking DB Row-Level Security)
+  const visibleProperties = useMemo(() => {
+    if (activeRole === 'manager') {
+      // Mock: Manager is only assigned to 'prop-1' and 'prop-3'
+      return properties.filter(p => p.id === 'prop-1' || p.id === 'prop-3');
+    }
+    return properties;
+  }, [properties, activeRole]);
+
+  const visiblePropertyIds = useMemo(() => new Set(visibleProperties.map(p => p.id)), [visibleProperties]);
+
+  const visibleUnits = useMemo(() => units.filter(u => visiblePropertyIds.has(u.propertyId)), [units, visiblePropertyIds]);
+  const visibleTenants = useMemo(() => tenants.filter(t => visiblePropertyIds.has(t.propertyId)), [tenants, visiblePropertyIds]);
+  const visibleComplaints = useMemo(() => complaints.filter(c => visiblePropertyIds.has(c.propertyId)), [complaints, visiblePropertyIds]);
+  const visibleExpenses = useMemo(() => expenses.filter(e => visiblePropertyIds.has(e.propertyId)), [expenses, visiblePropertyIds]);
+  const visiblePayments = useMemo(() => payments.filter(p => visiblePropertyIds.has(p.propertyId)), [payments, visiblePropertyIds]);
+
+  // Ensure selectedPropertyId is valid for the current role
+  React.useEffect(() => {
+    if (selectedPropertyId !== 'all' && !visiblePropertyIds.has(selectedPropertyId) && visibleProperties.length > 0) {
+      setSelectedPropertyId('all');
+    }
+  }, [activeRole, visiblePropertyIds, selectedPropertyId, visibleProperties]);
+
   // Compute aggregated stats dynamically based on selectedPropertyId filter
   const filteredMetrics = useMemo(() => {
     const activeProps = selectedPropertyId === 'all'
-      ? properties
-      : properties.filter(p => p.id === selectedPropertyId);
+      ? visibleProperties
+      : visibleProperties.filter(p => p.id === selectedPropertyId);
 
     const todayCollection = activeProps.reduce((sum, p) => sum + p.todayCollection, 0);
     const duesThisMonth = activeProps.reduce((sum, p) => sum + p.duesThisMonth, 0);
@@ -273,8 +317,8 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const totalUnitsCount = activeProps.reduce((sum, p) => sum + p.unitsCount, 0);
 
     const activeComplaints = selectedPropertyId === 'all'
-      ? complaints.filter(c => c.status !== 'Resolved')
-      : complaints.filter(c => c.propertyId === selectedPropertyId && c.status !== 'Resolved');
+      ? visibleComplaints.filter(c => c.status !== 'Resolved')
+      : visibleComplaints.filter(c => c.propertyId === selectedPropertyId && c.status !== 'Resolved');
 
     const pendingComplaintsCount = activeComplaints.length;
 
@@ -308,7 +352,7 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         d60_plus
       }
     };
-  }, [selectedPropertyId, properties, complaints]);
+  }, [selectedPropertyId, visibleProperties, visibleComplaints]);
 
   // Action implementations
   const recordPayment = (paymentData: Omit<Payment, 'id' | 'receiptNumber'>) => {
@@ -378,7 +422,7 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             phone: tenantData.phone,
             depositAmount: tenantData.depositAmount,
             monthlyRent: tenantData.monthlyRent,
-            leaseStart: tenantData.moveInDate,
+            leaseStart: tenantData.leaseStart || new Date().toISOString().split('T')[0],
             leaseEnd: '2027-08-01',
             emergencyContactName: tenantData.emergencyContactName,
             emergencyContactPhone: tenantData.emergencyContactPhone,
@@ -540,6 +584,8 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setSelectedPropertyId,
         activeTab,
         setActiveTab,
+        activeRole,
+        setActiveRole,
         isQuickAddOpen,
         setIsQuickAddOpen,
         isTenantQROpen,
@@ -552,15 +598,17 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setIsAIChatOpen,
         selectedReceiptPayment,
         setSelectedReceiptPayment,
-        properties,
-        units,
-        tenants,
-        complaints,
-        expenses,
+        isInquiryModalOpen,
+        setIsInquiryModalOpen,
+        properties: visibleProperties,
+        units: visibleUnits,
+        tenants: visibleTenants,
+        complaints: visibleComplaints,
+        expenses: visibleExpenses,
         announcements,
         documents,
         users,
-        payments,
+        payments: visiblePayments,
         filteredMetrics,
         recordPayment,
         addTenant,

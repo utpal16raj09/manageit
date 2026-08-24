@@ -3,9 +3,10 @@ import { useProperty } from '../../../context/PropertyContext';
 import { Menu, X, ArrowRight } from 'lucide-react';
 import { PropPulseLogo } from '../../../components/ScribbleIcons';
 import { AuthModal } from '../../../components/AuthModal';
+import { InquiryModal } from '../../../components/InquiryModal';
 
 export const Nav: React.FC = () => {
-  const { setActiveTab } = useProperty();
+  const { setActiveTab, setIsInquiryModalOpen } = useProperty();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
@@ -33,12 +34,18 @@ export const Nav: React.FC = () => {
         </div>
 
         {/* Launch Dashboard Pill Button -> Triggers Auth Modal */}
-        <div className="hidden lg:flex items-center">
+        <div className="hidden lg:flex items-center space-x-3">
+          <button
+            onClick={() => setIsInquiryModalOpen(true)}
+            className="px-6 py-2.5 rounded-full border-2 border-[#003087] text-[#003087] hover:bg-[#003087]/5 font-bold text-sm transition-all duration-200 inline-flex items-center shadow-xs cursor-pointer active:scale-95"
+          >
+            Inquire
+          </button>
           <button
             onClick={() => setIsAuthOpen(true)}
             className="px-6 py-2.5 rounded-full bg-[#003087] hover:bg-[#012169] text-white font-bold text-sm transition-all duration-200 inline-flex items-center space-x-2 shadow-xs cursor-pointer active:scale-95"
           >
-            <span>Launch Dashboard</span>
+            <span>Login</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -58,19 +65,28 @@ export const Nav: React.FC = () => {
             <a href="#features" onClick={() => setMobileMenuOpen(false)} className="block text-sm font-bold text-[#012169]">Capabilities</a>
             <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="block text-sm font-bold text-[#012169]">How It Works</a>
             <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="block text-sm font-bold text-[#012169]">FAQ</a>
-            <button
-              onClick={() => { setIsAuthOpen(true); setMobileMenuOpen(false); }}
-              className="w-full py-3 rounded-full bg-[#003087] text-white font-bold text-sm flex items-center justify-center space-x-2"
-            >
-              <span>Launch Dashboard</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            <div className="flex flex-col space-y-3 pt-2">
+              <button
+                onClick={() => { setIsInquiryModalOpen(true); setMobileMenuOpen(false); }}
+                className="w-full py-3 rounded-full border-2 border-[#003087] text-[#003087] hover:bg-[#003087]/5 font-bold text-sm flex items-center justify-center transition-all"
+              >
+                Inquire
+              </button>
+              <button
+                onClick={() => { setIsAuthOpen(true); setMobileMenuOpen(false); }}
+                className="w-full py-3 rounded-full bg-[#003087] text-white font-bold text-sm flex items-center justify-center space-x-2 transition-all"
+              >
+                <span>Login</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         )}
       </nav>
 
       {/* Login Authentication Modal */}
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+      <InquiryModal />
     </>
   );
 };

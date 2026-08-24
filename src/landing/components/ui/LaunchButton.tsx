@@ -7,7 +7,7 @@ export const LaunchButton: React.FC<{
   children?: React.ReactNode; 
   className?: string;
   onClick?: () => void;
-}> = ({ children = "Launch Dashboard", className = "", onClick }) => {
+}> = ({ children = "Login", className = "", onClick }) => {
   const { setActiveTab } = useProperty();
   const ref = useRef<HTMLButtonElement>(null);
 

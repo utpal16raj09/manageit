@@ -8,6 +8,8 @@ import { MoneyStrip } from './components/MoneyStrip';
 import { StatusStrip } from './components/StatusStrip';
 import { OccupancyEfficiencyCard } from './components/OccupancyEfficiencyCard';
 import { LiveRentRollWidget } from './components/LiveRentRollWidget';
+import { ManagerDashboardView } from './components/ManagerDashboardView';
+import { TenantDashboardView } from './components/TenantDashboardView';
 import { PropertiesView } from './components/PropertiesView';
 import { ComplaintsView } from './components/ComplaintsView';
 import { MoreView } from './components/MoreView';
@@ -47,6 +49,14 @@ const AppContent: React.FC = () => {
               <OccupancyEfficiencyCard />
               <LiveRentRollWidget />
             </div>
+          )}
+
+          {activeTab === 'manager-dashboard' && (
+            <ManagerDashboardView />
+          )}
+
+          {activeTab.startsWith('tenant-') && (
+            <TenantDashboardView />
           )}
 
           {activeTab === 'properties' && (

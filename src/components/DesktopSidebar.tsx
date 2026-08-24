@@ -9,7 +9,7 @@ import {
   ScribbleQR,
   ScribbleBell
 } from './ScribbleIcons';
-import { LayoutDashboard, HelpCircle, Settings, ChevronRight, User, Sparkles, LogOut } from 'lucide-react';
+import { LayoutDashboard, HelpCircle, Settings, ChevronRight, User, Sparkles, LogOut, CreditCard, MessageSquare, FileText, Utensils, Gift, QrCode } from 'lucide-react';
 
 export const DesktopSidebar: React.FC = () => {
   const {
@@ -19,19 +19,50 @@ export const DesktopSidebar: React.FC = () => {
     setIsAgingModalOpen,
     setIsNotificationsOpen,
     filteredMetrics,
-    users
+    users,
+    activeRole
   } = useProperty();
 
-  const currentUser = users[0] || { name: 'Utpal Roy', email: 'owner@proppulse.com', role: 'owner' };
+  let currentUser = users[0] || { name: 'Utpal Roy', email: 'owner@proppulse.com', role: 'owner' };
+  
+  if (activeRole === 'tenant') {
+    currentUser = { name: 'John Doe', email: 'tenant@example.com', role: 'tenant' } as any;
+  } else if (activeRole === 'manager') {
+    currentUser = { name: 'Operations Manager', email: 'manager@proppulse.com', role: 'manager' } as any;
+  }
 
-  const navItems: { id: TabType; label: string; icon: React.FC<{ className?: string; size?: number }>; badge?: number }[] = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'properties', label: 'Properties & Units', icon: ScribbleBuilding },
-    { id: 'complaints', label: 'Tickets & Complaints', icon: ScribbleComplaint, badge: filteredMetrics.pendingComplaintsCount },
-    { id: 'more', label: 'Financials & P&L', icon: ScribbleChart },
-    { id: 'help', label: 'Help Center', icon: HelpCircle },
-    { id: 'settings', label: 'Settings', icon: Settings }
-  ];
+  let navItems: { id: TabType; label: string; icon: React.FC<{ className?: string; size?: number }>; badge?: number }[] = [];
+  
+  if (activeRole === 'tenant') {
+    navItems = [
+      { id: 'tenant-dashboard', label: 'My Dashboard', icon: LayoutDashboard },
+      { id: 'tenant-payments', label: 'Payment History', icon: CreditCard },
+      { id: 'tenant-support', label: 'Support Requests', icon: MessageSquare },
+      { id: 'tenant-documents', label: 'Documents', icon: FileText },
+      { id: 'tenant-food', label: 'Food Menu', icon: Utensils },
+      { id: 'tenant-referrals', label: 'Refer & Earn', icon: Gift },
+      { id: 'tenant-qr', label: 'My QR Pass', icon: QrCode },
+      { id: 'settings', label: 'Settings', icon: Settings }
+    ];
+  } else if (activeRole === 'manager') {
+    navItems = [
+      { id: 'manager-dashboard', label: 'Operations Dashboard', icon: LayoutDashboard },
+      { id: 'properties', label: 'Properties & Units', icon: ScribbleBuilding },
+      { id: 'complaints', label: 'Tickets & Complaints', icon: ScribbleComplaint, badge: filteredMetrics.pendingComplaintsCount },
+      { id: 'help', label: 'Help Center', icon: HelpCircle },
+      { id: 'settings', label: 'Settings', icon: Settings }
+    ];
+  } else {
+    // Default to owner
+    navItems = [
+      { id: 'dashboard', label: 'Portfolio Dashboard', icon: LayoutDashboard },
+      { id: 'properties', label: 'Properties & Units', icon: ScribbleBuilding },
+      { id: 'complaints', label: 'Tickets & Complaints', icon: ScribbleComplaint, badge: filteredMetrics.pendingComplaintsCount },
+      { id: 'more', label: 'Financials & P&L', icon: ScribbleChart },
+      { id: 'help', label: 'Help Center', icon: HelpCircle },
+      { id: 'settings', label: 'Settings', icon: Settings }
+    ];
+  }
 
   return (
     <aside className="hidden lg:flex flex-col w-64 bg-white text-[#012169] border-r border-slate-200 fixed top-0 bottom-0 left-0 z-40 font-sans shadow-xs">
@@ -46,7 +77,7 @@ export const DesktopSidebar: React.FC = () => {
       {/* Main Navigation Links */}
       <div className="flex-1 px-3 py-6 space-y-1.5 overflow-y-auto">
         <div className="px-3 text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-2">
-          Operations Hub
+          {activeRole === 'tenant' ? 'Tenant Portal' : activeRole === 'manager' ? 'Property Operations' : 'Operations Hub'}
         </div>
 
         {navItems.map(item => {
@@ -79,42 +110,46 @@ export const DesktopSidebar: React.FC = () => {
           );
         })}
 
-        <div className="pt-6 px-3 text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-2">
-          Landlord Utilities
-        </div>
+        {activeRole !== 'tenant' && (
+          <>
+            <div className="pt-6 px-3 text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-2">
+              Landlord Utilities
+            </div>
 
-        <button
-          onClick={() => setIsTenantQROpen(true)}
-          className="w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-extrabold text-sm text-slate-600 hover:bg-[#f0f7ff] hover:text-[#003087] transition-all gap-2"
-        >
-          <div className="flex items-center gap-3 min-w-0">
-            <ScribbleQR className="w-5 h-5 text-[#009cde] flex-shrink-0" />
-            <span className="truncate">Tenant QR Onboard</span>
-          </div>
-          <ChevronRight className="w-4 h-4 text-slate-400 flex-shrink-0" />
-        </button>
+            <button
+              onClick={() => setIsTenantQROpen(true)}
+              className="w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-extrabold text-sm text-slate-600 hover:bg-[#f0f7ff] hover:text-[#003087] transition-all gap-2"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <ScribbleQR className="w-5 h-5 text-[#009cde] flex-shrink-0" />
+                <span className="truncate">Tenant QR Onboard</span>
+              </div>
+              <ChevronRight className="w-4 h-4 text-slate-400 flex-shrink-0" />
+            </button>
 
-        <button
-          onClick={() => setIsAgingModalOpen(true)}
-          className="w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-extrabold text-sm text-slate-600 hover:bg-[#f0f7ff] hover:text-[#003087] transition-all gap-2"
-        >
-          <div className="flex items-center gap-3 min-w-0">
-            <ScribbleMoney className="w-5 h-5 text-[#009cde] flex-shrink-0" />
-            <span className="truncate">Aging Dues Radar</span>
-          </div>
-          <ChevronRight className="w-4 h-4 text-slate-400 flex-shrink-0" />
-        </button>
+            <button
+              onClick={() => setIsAgingModalOpen(true)}
+              className="w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-extrabold text-sm text-slate-600 hover:bg-[#f0f7ff] hover:text-[#003087] transition-all gap-2"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <ScribbleMoney className="w-5 h-5 text-[#009cde] flex-shrink-0" />
+                <span className="truncate">Aging Dues Radar</span>
+              </div>
+              <ChevronRight className="w-4 h-4 text-slate-400 flex-shrink-0" />
+            </button>
 
-        <button
-          onClick={() => setIsNotificationsOpen(true)}
-          className="w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-extrabold text-sm text-slate-600 hover:bg-[#f0f7ff] hover:text-[#003087] transition-all gap-2"
-        >
-          <div className="flex items-center gap-3 min-w-0">
-            <ScribbleBell className="w-5 h-5 text-[#009cde] flex-shrink-0" />
-            <span className="truncate">Notifications</span>
-          </div>
-          <ChevronRight className="w-4 h-4 text-slate-400 flex-shrink-0" />
-        </button>
+            <button
+              onClick={() => setIsNotificationsOpen(true)}
+              className="w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-extrabold text-sm text-slate-600 hover:bg-[#f0f7ff] hover:text-[#003087] transition-all gap-2"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <ScribbleBell className="w-5 h-5 text-[#009cde] flex-shrink-0" />
+                <span className="truncate">Notifications</span>
+              </div>
+              <ChevronRight className="w-4 h-4 text-slate-400 flex-shrink-0" />
+            </button>
+          </>
+        )}
       </div>
 
       {/* Dedicated User Account Footer Card */}
@@ -132,7 +167,7 @@ export const DesktopSidebar: React.FC = () => {
                 {currentUser.name}
               </div>
               <div className="text-[11px] font-semibold text-slate-400 truncate capitalize">
-                {currentUser.role === 'owner' ? 'Property Owner' : currentUser.role}
+                {activeRole ? (activeRole === 'owner' ? 'Property Owner' : activeRole) : (currentUser.role === 'owner' ? 'Property Owner' : currentUser.role)}
               </div>
             </div>
           </div>

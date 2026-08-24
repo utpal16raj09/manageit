@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 
 export const Hero: React.FC = () => {
-  const { setActiveTab } = useProperty();
+  const { setActiveTab, setIsInquiryModalOpen } = useProperty();
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   return (
@@ -71,10 +71,10 @@ export const Hero: React.FC = () => {
               {/* Action Buttons — SIDE BY SIDE */}
               <div className="flex flex-row items-center justify-center sm:justify-start gap-2.5 sm:gap-4 w-full sm:w-auto pt-1">
                 <button
-                  onClick={() => setIsAuthOpen(true)}
+                  onClick={() => setIsInquiryModalOpen(true)}
                   className="flex-1 sm:flex-none bg-[#003087] hover:bg-[#012169] text-white px-5 sm:px-7 py-3.5 sm:py-4 rounded-full font-bold text-xs sm:text-sm transition-all duration-200 shadow-md flex items-center justify-center space-x-1.5 sm:space-x-2 cursor-pointer active:scale-95 whitespace-nowrap"
                 >
-                  <span>Join the Waitlist</span>
+                  <span>Inquire Now</span>
                   <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </button>
                 

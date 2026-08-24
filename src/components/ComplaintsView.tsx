@@ -10,7 +10,7 @@ import {
 import { X, ChevronDown, Check, Filter } from 'lucide-react';
 
 export const ComplaintsView: React.FC = () => {
-  const { complaints, addComplaint, updateComplaintStatus, properties, selectedPropertyId } = useProperty();
+  const { complaints, addComplaint, updateComplaintStatus, properties, selectedPropertyId, activeRole } = useProperty();
 
   const [filterStatus, setFilterStatus] = useState<'All' | 'Open' | 'In Progress' | 'Resolved'>('All');
   const [isNewTicketOpen, setIsNewTicketOpen] = useState(false);
@@ -158,13 +158,6 @@ export const ComplaintsView: React.FC = () => {
             )}
           </div>
 
-          <button
-            onClick={() => setIsNewTicketOpen(true)}
-            className="px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-[#009cde] hover:bg-[#0080b8] text-white font-extrabold text-xs sm:text-sm shadow-xs flex items-center gap-2 transition-transform active:scale-95"
-          >
-            <ScribblePlus className="w-4 h-4 stroke-[3]" />
-            <span>New Ticket</span>
-          </button>
         </div>
       </div>
 
@@ -200,31 +193,39 @@ export const ComplaintsView: React.FC = () => {
 
               {/* Card Status Dropdown with Click-Outside Ref */}
               <div ref={openDropdownId === ticket.id ? cardDropdownRef : null} className="relative flex-shrink-0">
-                <button
-                  onClick={() => setOpenDropdownId(openDropdownId === ticket.id ? null : ticket.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border transition-all flex items-center gap-1.5 shadow-2xs ${statusColors[ticket.status]}`}
-                >
-                  <span>{ticket.status}</span>
-                  <ChevronDown className="w-3.5 h-3.5" />
-                </button>
+                {activeRole === 'manager' ? (
+                  <>
+                    <button
+                      onClick={() => setOpenDropdownId(openDropdownId === ticket.id ? null : ticket.id)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border transition-all flex items-center gap-1.5 shadow-2xs ${statusColors[ticket.status]}`}
+                    >
+                      <span>{ticket.status}</span>
+                      <ChevronDown className="w-3.5 h-3.5" />
+                    </button>
 
-                {openDropdownId === ticket.id && (
-                  <div className="absolute right-0 top-full mt-2 w-44 bg-white border border-slate-200 rounded-2xl shadow-2xl py-1.5 z-30 animate-in fade-in zoom-in-95 duration-150">
-                    {(['Open', 'In Progress', 'Resolved'] as const).map(st => (
-                      <button
-                        key={st}
-                        onClick={() => {
-                          updateComplaintStatus(ticket.id, st);
-                          setOpenDropdownId(null);
-                        }}
-                        className={`w-full px-4 py-2.5 text-xs sm:text-sm font-bold flex items-center justify-between transition-colors ${
-                          ticket.status === st ? 'bg-[#f0f7ff] text-[#003087]' : 'text-slate-700 hover:bg-slate-50'
-                        }`}
-                      >
-                        <span>{st}</span>
-                        {ticket.status === st && <Check className="w-4 h-4 text-[#009cde]" />}
-                      </button>
-                    ))}
+                    {openDropdownId === ticket.id && (
+                      <div className="absolute right-0 top-full mt-2 w-44 bg-white border border-slate-200 rounded-2xl shadow-2xl py-1.5 z-30 animate-in fade-in zoom-in-95 duration-150">
+                        {(['Open', 'In Progress', 'Resolved'] as const).map(st => (
+                          <button
+                            key={st}
+                            onClick={() => {
+                              updateComplaintStatus(ticket.id, st);
+                              setOpenDropdownId(null);
+                            }}
+                            className={`w-full px-4 py-2.5 text-xs sm:text-sm font-bold flex items-center justify-between transition-colors ${
+                              ticket.status === st ? 'bg-[#f0f7ff] text-[#003087]' : 'text-slate-700 hover:bg-slate-50'
+                            }`}
+                          >
+                            <span>{st}</span>
+                            {ticket.status === st && <Check className="w-4 h-4 text-[#009cde]" />}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border flex items-center justify-center shadow-2xs ${statusColors[ticket.status].replace(/hover:bg-[a-z]+-[0-9]+/g, '')}`}>
+                    <span>{ticket.status}</span>
                   </div>
                 )}
               </div>
