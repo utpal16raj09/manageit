@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useProperty } from '../context/PropertyContext';
-import { Settings, CheckCircle2, Bell, DollarSign, Database } from 'lucide-react';
+import { ScribbleSettingsIllustration } from './ScribbleIcons';
+import { Settings, CheckCircle2, Bell, DollarSign, Database, Sun, Moon } from 'lucide-react';
 
 export const SettingsView: React.FC = () => {
-  const { isOffline, toggleOffline } = useProperty();
+  const { isOffline, toggleOffline, theme, setTheme } = useProperty();
 
   const [currency, setCurrency] = useState<'INR' | 'USD'>('INR');
   const [autoNudge, setAutoNudge] = useState(true);
@@ -21,14 +22,70 @@ export const SettingsView: React.FC = () => {
     <div className="space-y-8 font-sans max-w-4xl">
       {/* Top Banner */}
       <div className="flex items-center gap-3.5">
-        <Settings className="w-6 h-6 text-[#003087] stroke-[2.4]" />
+        <ScribbleSettingsIllustration className="w-10 h-10 text-[#003087] dark:text-[#f8fafc] flex-shrink-0" />
         <div>
-          <h2 className="text-xl font-extrabold text-[#012169]">System & Portfolio Preferences</h2>
-          <p className="text-xs sm:text-sm font-semibold text-slate-500">Configure currency, notifications, tax rules, and offline data</p>
+          <h2 className="text-xl sm:text-2xl font-extrabold text-[#012169] dark:text-[#f8fafc] tracking-tight">System & Portfolio Preferences</h2>
+          <p className="text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400">Configure currency, notifications, theme, tax rules, and offline data</p>
         </div>
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">
+        {/* Appearance & Theme */}
+        <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-5">
+          <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+            {theme === 'dark' ? (
+              <Moon className="w-5 h-5 text-[#009cde]" />
+            ) : (
+              <Sun className="w-5 h-5 text-[#009cde]" />
+            )}
+            <h3 className="text-base font-extrabold text-[#012169]">Appearance & Theme</h3>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <button
+              type="button"
+              onClick={() => setTheme('light')}
+              className={`p-4 rounded-2xl border flex items-center justify-between transition-all cursor-pointer ${
+                theme === 'light'
+                  ? 'bg-[#e0f2fe] border-[#009cde] text-[#003087] shadow-xs'
+                  : 'bg-[#f8fafc] border-slate-200 text-slate-600 hover:border-slate-300'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-amber-500 shadow-2xs">
+                  <Sun className="w-5 h-5" />
+                </div>
+                <div className="text-left">
+                  <div className="text-sm font-extrabold text-[#012169]">Light Mode</div>
+                  <div className="text-xs text-slate-500">Original crisp light theme</div>
+                </div>
+              </div>
+              {theme === 'light' && <CheckCircle2 className="w-5 h-5 text-[#003087]" />}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setTheme('dark')}
+              className={`p-4 rounded-2xl border flex items-center justify-between transition-all cursor-pointer ${
+                theme === 'dark'
+                  ? 'bg-[#16263f] border-[#38bdf8] text-[#38bdf8] shadow-xs'
+                  : 'bg-[#f8fafc] border-slate-200 text-slate-600 hover:border-slate-300'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-[#121826] border border-slate-700 flex items-center justify-center text-[#38bdf8] shadow-2xs">
+                  <Moon className="w-5 h-5" />
+                </div>
+                <div className="text-left">
+                  <div className="text-sm font-extrabold text-[#012169]">Dark Mode</div>
+                  <div className="text-xs text-slate-500">Deep sleek high-contrast palette</div>
+                </div>
+              </div>
+              {theme === 'dark' && <CheckCircle2 className="w-5 h-5 text-[#38bdf8]" />}
+            </button>
+          </div>
+        </div>
+
         {/* Financial Preferences */}
         <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-5">
           <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
@@ -112,8 +169,8 @@ export const SettingsView: React.FC = () => {
             <button
               type="button"
               onClick={toggleOffline}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-extrabold shadow-xs transition-all flex-shrink-0 ${
-                isOffline ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-[#e0f2fe] text-[#003087] border border-[#009cde]/30'
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold shadow-2xs transition-all flex-shrink-0 cursor-pointer ${
+                isOffline ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-[#f0f7ff] text-[#003087] border border-[#009cde]/30'
               }`}
             >
               {isOffline ? 'Simulating Offline' : 'Online Mode'}

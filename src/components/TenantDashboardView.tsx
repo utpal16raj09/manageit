@@ -1,7 +1,29 @@
 import React, { useState } from 'react';
-import { Home, CreditCard, MessageSquare, Bell, FileText, Settings, ArrowLeft, CheckCircle2, Clock, Check, Utensils, Gift, QrCode, X, ChevronDown, Download } from 'lucide-react';
+import { 
+  Home, 
+  CreditCard, 
+  MessageSquare, 
+  Bell, 
+  FileText, 
+  Settings, 
+  ArrowLeft, 
+  CheckCircle2, 
+  Clock, 
+  Check, 
+  Utensils, 
+  Gift, 
+  QrCode, 
+  X, 
+  ChevronDown, 
+  Download,
+  Calendar,
+  Sparkles,
+  Info,
+  ShieldCheck,
+  AlertCircle
+} from 'lucide-react';
 import { useProperty } from '../context/PropertyContext';
-import { ScribbleUsers, ScribbleClock } from './ScribbleIcons';
+import { ScribbleUsers, ScribbleClock, ScribbleTenantIllustration } from './ScribbleIcons';
 import { Complaint } from '../types/property';
 
 export const TenantDashboardView: React.FC = () => {
@@ -14,6 +36,13 @@ export const TenantDashboardView: React.FC = () => {
 
   const [isModalCatOpen, setIsModalCatOpen] = useState(false);
   const [isModalPrioOpen, setIsModalPrioOpen] = useState(false);
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  };
 
   const handleCreateTicket = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,21 +70,22 @@ export const TenantDashboardView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300 pb-20 lg:pb-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
+    <div className="space-y-6 max-w-7xl mx-auto font-sans pb-16">
+      {/* Top Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-white/[0.08]">
+        <div className="flex items-center space-x-3">
           {activeTab !== 'tenant-dashboard' && (
             <button
               onClick={() => setActiveTab('tenant-dashboard')}
-              className="p-2 rounded-xl bg-slate-100 text-slate-600 hover:bg-[#003087] hover:text-white transition-colors"
+              className="p-2 rounded-xl bg-white dark:bg-[#121722] border border-slate-200 dark:border-white/[0.08] text-slate-600 dark:text-slate-300 hover:text-[#003087] hover:border-[#003087] transition-colors shadow-2xs"
             >
-              <ArrowLeft className="w-5 h-5" />
+              <ArrowLeft className="w-5 h-5 stroke-[2.2]" />
             </button>
           )}
+          <ScribbleTenantIllustration className="w-10 h-10 text-[#003087] dark:text-[#f8fafc] flex-shrink-0" />
           <div>
-            <h2 className="text-2xl font-black text-[#012169] tracking-tight">
-              {activeTab === 'tenant-dashboard' && 'Tenant Portal'}
+            <h2 className="text-xl sm:text-2xl font-extrabold text-[#012169] dark:text-[#f8fafc] tracking-tight">
+              {activeTab === 'tenant-dashboard' && `${getGreeting()}, John!`}
               {activeTab === 'tenant-payments' && 'Payment History'}
               {activeTab === 'tenant-support' && 'Support Requests'}
               {activeTab === 'tenant-documents' && 'My Documents'}
@@ -63,138 +93,110 @@ export const TenantDashboardView: React.FC = () => {
               {activeTab === 'tenant-referrals' && 'Refer & Earn'}
               {activeTab === 'tenant-qr' && 'Digital Gate Pass'}
             </h2>
-            <p className="text-sm text-slate-500 font-medium mt-1">Welcome back, John Doe</p>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
+              {activeTab === 'tenant-dashboard' ? 'Welcome back to your resident portal' : 'Sunrise PG • Room 101A'}
+            </p>
           </div>
         </div>
         <div className="flex space-x-3">
           <button
             onClick={() => setIsNotificationsOpen(true)}
-            className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-[#003087] hover:border-[#003087] transition-colors shadow-sm relative cursor-pointer"
+            className="w-10 h-10 rounded-xl bg-white dark:bg-[#121722] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-[#003087] hover:border-[#003087] transition-colors shadow-2xs relative cursor-pointer"
           >
-            <Bell className="w-5 h-5" />
-            <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white" />
+            <Bell className="w-5 h-5 stroke-[2]" />
+            <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full" />
           </button>
         </div>
       </div>
 
       {activeTab === 'tenant-dashboard' && (
-        <>
-          {/* Accommodation Details Card */}
-          <div className="bg-gradient-to-br from-[#003087] to-[#012169] rounded-3xl p-6 text-white shadow-lg relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
-            <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-              <div>
-                <p className="text-white/70 text-sm font-bold uppercase tracking-wider mb-1">Your Accommodation</p>
-                <h3 className="text-3xl font-black mb-2">Sunrise PG - Room 101A</h3>
-                <p className="text-white/90">Lease: Aug 2026 - Jul 2027</p>
+        <div className="space-y-5 sm:space-y-6">
+          {/* Accommodation Details Card - Solid Minimal Luxury (No Gradients) */}
+          <div className="bg-[#003087] dark:bg-[#121722] rounded-2xl p-4 sm:p-5 text-white border border-[#003087]/30 dark:border-white/[0.08] shadow-2xs relative overflow-hidden">
+            <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div className="space-y-0.5">
+                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-white/10 text-white/90 text-[10px] font-extrabold uppercase tracking-wider mb-0.5 border border-white/15">
+                  <Home className="w-3 h-3" />
+                  <span>Your Accommodation</span>
+                </div>
+                <h3 className="text-lg sm:text-xl font-black tracking-tight">Sunrise PG - Room 101A</h3>
+                <div className="flex items-center gap-1.5 text-white/80 text-xs font-medium">
+                  <Calendar className="w-3 h-3 text-[#7dd3fc]" />
+                  <span>Lease Term: Aug 2026 - Jul 2027</span>
+                </div>
               </div>
-              <div className="bg-white/10 p-4 rounded-2xl backdrop-blur-md border border-white/20 min-w-[200px]">
-                <p className="text-white/70 text-xs font-bold uppercase mb-1">Upcoming Due</p>
-                <p className="text-2xl font-black mb-2">₹14,000</p>
-                <button className="w-full py-2 bg-white text-[#003087] font-bold rounded-xl hover:bg-slate-100 transition-colors text-sm">
-                  Pay Now
+              <div className="bg-white/10 dark:bg-white/[0.04] p-3.5 rounded-xl backdrop-blur-md border border-white/20 dark:border-white/[0.08] min-w-[180px]">
+                <div className="flex items-center justify-between text-white/70 text-[10px] font-bold uppercase mb-0.5">
+                  <span>Upcoming Due</span>
+                  <span className="text-[10px] font-mono text-amber-300">Due in 5 days</span>
+                </div>
+                <p className="text-lg sm:text-xl font-black mb-2">₹14,000</p>
+                <button className="w-full py-1.5 bg-white text-[#003087] font-extrabold rounded-lg hover:bg-slate-100 transition-colors text-xs shadow-xs cursor-pointer active:scale-95 flex items-center justify-center gap-1.5">
+                  <CreditCard className="w-3 h-3" />
+                  <span>Pay Now</span>
                 </button>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5">
             {/* Quick Links */}
-            <div
-              onClick={() => setActiveTab('tenant-payments')}
-              className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-center items-center text-center cursor-pointer hover:border-[#003087] transition-colors group"
-            >
-              <div className="w-12 h-12 rounded-full bg-slate-50 group-hover:bg-[#003087]/5 flex items-center justify-center mb-3 transition-colors">
-                <CreditCard className="w-6 h-6 text-slate-400 group-hover:text-[#003087]" />
-              </div>
-              <h4 className="font-bold text-slate-800">Payment History</h4>
-              <p className="text-xs text-slate-500 mt-1">View receipts and past dues</p>
-            </div>
-
-            <div
-              onClick={() => setActiveTab('tenant-support')}
-              className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-center items-center text-center cursor-pointer hover:border-[#003087] transition-colors group"
-            >
-              <div className="w-12 h-12 rounded-full bg-slate-50 group-hover:bg-[#003087]/5 flex items-center justify-center mb-3 transition-colors">
-                <MessageSquare className="w-6 h-6 text-slate-400 group-hover:text-[#003087]" />
-              </div>
-              <h4 className="font-bold text-slate-800">Support Requests</h4>
-              <p className="text-xs text-slate-500 mt-1">Raise maintenance issues</p>
-            </div>
-
-            <div
-              onClick={() => setActiveTab('tenant-documents')}
-              className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-center items-center text-center cursor-pointer hover:border-[#003087] transition-colors group"
-            >
-              <div className="w-12 h-12 rounded-full bg-slate-50 group-hover:bg-[#003087]/5 flex items-center justify-center mb-3 transition-colors">
-                <FileText className="w-6 h-6 text-slate-400 group-hover:text-[#003087]" />
-              </div>
-              <h4 className="font-bold text-slate-800">Documents</h4>
-              <p className="text-xs text-slate-500 mt-1">Lease agreement and KYC</p>
-            </div>
-
-            <div
-              onClick={() => setActiveTab('tenant-food')}
-              className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-center items-center text-center cursor-pointer hover:border-[#003087] transition-colors group"
-            >
-              <div className="w-12 h-12 rounded-full bg-slate-50 group-hover:bg-[#003087]/5 flex items-center justify-center mb-3 transition-colors">
-                <Utensils className="w-6 h-6 text-slate-400 group-hover:text-[#003087]" />
-              </div>
-              <h4 className="font-bold text-slate-800">Food Menu</h4>
-              <p className="text-xs text-slate-500 mt-1">This week's mess meals</p>
-            </div>
-
-            <div
-              onClick={() => setActiveTab('tenant-referrals')}
-              className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-center items-center text-center cursor-pointer hover:border-[#003087] transition-colors group"
-            >
-              <div className="w-12 h-12 rounded-full bg-slate-50 group-hover:bg-[#003087]/5 flex items-center justify-center mb-3 transition-colors">
-                <Gift className="w-6 h-6 text-slate-400 group-hover:text-[#003087]" />
-              </div>
-              <h4 className="font-bold text-slate-800">Refer & Earn</h4>
-              <p className="text-xs text-slate-500 mt-1">Invite friends, get ₹1000 off</p>
-            </div>
-
-            <div
-              onClick={() => setActiveTab('tenant-qr')}
-              className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-center items-center text-center cursor-pointer hover:border-[#003087] transition-colors group"
-            >
-              <div className="w-12 h-12 rounded-full bg-slate-50 group-hover:bg-[#003087]/5 flex items-center justify-center mb-3 transition-colors">
-                <QrCode className="w-6 h-6 text-slate-400 group-hover:text-[#003087]" />
-              </div>
-              <h4 className="font-bold text-slate-800">My QR Pass</h4>
-              <p className="text-xs text-slate-500 mt-1">Digital entry gate pass</p>
-            </div>
+            {[
+              { id: 'tenant-payments', label: 'Payment History', desc: 'Receipts & past dues', icon: CreditCard },
+              { id: 'tenant-support', label: 'Support Requests', desc: 'Maintenance issues', icon: MessageSquare },
+              { id: 'tenant-documents', label: 'Documents', desc: 'Lease & KYC files', icon: FileText },
+              { id: 'tenant-food', label: 'Food Menu', desc: "This week's meals", icon: Utensils },
+              { id: 'tenant-referrals', label: 'Refer & Earn', desc: 'Get ₹1000 off rent', icon: Gift },
+              { id: 'tenant-qr', label: 'My QR Pass', desc: 'Entry gate pass', icon: QrCode },
+            ].map((card) => {
+              const Icon = card.icon;
+              return (
+                <div
+                  key={card.id}
+                  onClick={() => setActiveTab(card.id as any)}
+                  className="bg-white rounded-2xl p-3.5 border border-slate-200/90 shadow-2xs flex flex-col justify-center items-center text-center cursor-pointer hover:border-[#003087] hover:shadow-xs transition-all group"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-100/80 group-hover:bg-[#003087] group-hover:text-white group-hover:border-[#003087] flex items-center justify-center mb-2 transition-all duration-200 text-[#003087]">
+                    <Icon className="w-4 h-4 stroke-[2]" />
+                  </div>
+                  <h4 className="font-extrabold text-xs text-[#012169] group-hover:text-[#003087] transition-colors">{card.label}</h4>
+                  <p className="text-[10px] text-slate-400 font-medium mt-0.5">{card.desc}</p>
+                </div>
+              );
+            })}
           </div>
 
           {/* Notice Board */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-              <h3 className="font-bold text-slate-800 flex items-center">
-                <Bell className="w-4 h-4 mr-2 text-slate-400" />
-                Important Updates
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+            <div className="p-3.5 sm:p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <h3 className="font-extrabold text-xs sm:text-sm text-slate-800 flex items-center gap-2">
+                <Info className="w-4 h-4 text-[#009cde]" />
+                <span>Notice Board & Important Updates</span>
               </h3>
             </div>
-            <div className="p-5 space-y-4">
-              <div className="flex gap-4">
-                <div className="w-2 h-2 mt-2 rounded-full bg-emerald-500 shrink-0" />
+            <div className="p-4 space-y-3">
+              <div className="flex gap-3 items-start">
+                <div className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-200/60 shrink-0">
+                  <Clock className="w-3.5 h-3.5" />
+                </div>
                 <div>
-                  <h4 className="font-bold text-slate-800 text-sm">Water Supply Maintenance</h4>
-                  <p className="text-sm text-slate-600 mt-1">Water supply will be affected tomorrow between 2 PM to 4 PM due to municipal maintenance work.</p>
-                  <p className="text-xs text-slate-400 mt-2">Posted 2 hours ago</p>
+                  <h4 className="font-bold text-slate-800 text-xs sm:text-sm">Water Supply Maintenance</h4>
+                  <p className="text-xs text-slate-600 mt-0.5">Water supply will be affected tomorrow between 2 PM to 4 PM due to municipal pipe servicing.</p>
+                  <p className="text-[10px] font-semibold text-slate-400 mt-1">Posted 2 hours ago</p>
                 </div>
               </div>
-              <div className="flex gap-4">
-                <div className="w-2 h-2 mt-2 rounded-full bg-blue-500 shrink-0" />
-                <div>
-                  <h4 className="font-bold text-slate-800 text-sm">Rent Due Reminder</h4>
-                  <p className="text-sm text-slate-600 mt-1">Please note that rent for September is due on the 1st. Avoid late fees by paying on time.</p>
-                  <p className="text-xs text-slate-400 mt-2">Posted 1 day ago</p>
+              <div className="flex gap-3 items-start">
+                <div className="p-1.5 rounded-lg bg-blue-50 text-blue-600 border border-blue-200/60 shrink-0">
+                  <CreditCard className="w-3.5 h-3.5" />
                 </div>
+                <div>
+                  <h4 className="font-bold text-slate-800 text-xs sm:text-sm">Rent Due Reminder</h4>
+                  <p className="text-xs text-slate-600 mt-0.5">Please note that rent for September is due on the 1st. Avoid late fees by transferring on time.</p>
+                  <p className="text-[10px] font-semibold text-slate-400 mt-1">Posted 1 day ago</p>                </div>
               </div>
             </div>
           </div>
-        </>
+        </div>
       )}
 
       {activeTab === 'tenant-payments' && (
@@ -310,8 +312,8 @@ export const TenantDashboardView: React.FC = () => {
       {activeTab === 'tenant-documents' && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 animate-in slide-in-from-right-4 duration-300">
           <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-start gap-4 hover:border-[#009cde] transition-colors cursor-pointer group">
-            <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center flex-shrink-0 group-hover:bg-[#003087]/5">
-              <FileText className="w-6 h-6 text-[#003087]" />
+            <div className="w-11 h-11 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center flex-shrink-0 group-hover:bg-[#003087] group-hover:text-white transition-all">
+              <FileText className="w-5 h-5 text-[#003087] group-hover:text-white" />
             </div>
             <div>
               <h4 className="font-extrabold text-[#012169] mb-1">Lease Agreement</h4>
@@ -321,8 +323,8 @@ export const TenantDashboardView: React.FC = () => {
           </div>
 
           <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-start gap-4 hover:border-[#009cde] transition-colors cursor-pointer group">
-            <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center flex-shrink-0 group-hover:bg-[#003087]/5">
-              <CheckCircle2 className="w-6 h-6 text-[#003087]" />
+            <div className="w-11 h-11 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center flex-shrink-0 group-hover:bg-[#003087] group-hover:text-white transition-all">
+              <CheckCircle2 className="w-5 h-5 text-[#003087] group-hover:text-white" />
             </div>
             <div>
               <h4 className="font-extrabold text-[#012169] mb-1">KYC Documents</h4>
@@ -337,7 +339,7 @@ export const TenantDashboardView: React.FC = () => {
         <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden animate-in slide-in-from-right-4 duration-300">
           <div className="p-6 border-b border-slate-100 flex items-center justify-between">
             <h3 className="text-lg font-extrabold text-[#012169]">This Week's Menu</h3>
-            <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Active Subscription</span>
+            <span className="px-3 py-1 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80">Active Subscription</span>
           </div>
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -360,11 +362,11 @@ export const TenantDashboardView: React.FC = () => {
 
       {activeTab === 'tenant-referrals' && (
         <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden animate-in slide-in-from-right-4 duration-300 text-center p-8">
-          <div className="w-16 h-16 rounded-full bg-blue-50 mx-auto flex items-center justify-center mb-4">
-            <Gift className="w-8 h-8 text-[#009cde]" />
+          <div className="w-14 h-14 rounded-2xl bg-[#f0f7ff] border border-[#009cde]/30 mx-auto flex items-center justify-center mb-4">
+            <Gift className="w-7 h-7 text-[#009cde]" />
           </div>
           <h3 className="text-xl font-extrabold text-[#012169] mb-2">Refer a Friend, Earn ₹1,000</h3>
-          <p className="text-slate-500 font-medium max-w-md mx-auto mb-6">
+          <p className="text-slate-500 font-medium max-w-md mx-auto mb-6 text-sm">
             Share your unique referral code with friends. When they move in, you get ₹1,000 off your next month's rent!
           </p>
           <div className="inline-flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl mb-4">
@@ -380,14 +382,14 @@ export const TenantDashboardView: React.FC = () => {
       {activeTab === 'tenant-qr' && (
         <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden animate-in slide-in-from-right-4 duration-300 flex flex-col items-center justify-center p-8">
           <h3 className="text-xl font-extrabold text-[#012169] mb-6">Digital Gate Pass</h3>
-          <div className="p-4 bg-white border-4 border-[#012169] rounded-3xl shadow-xl mb-6">
-            <QrCode className="w-48 h-48 text-[#012169]" />
+          <div className="p-4 bg-white border-2 border-slate-200 rounded-2xl shadow-md mb-6">
+            <QrCode className="w-48 h-48 text-[#003087]" />
           </div>
           <h4 className="font-black text-lg text-[#012169]">John Doe</h4>
           <p className="text-slate-500 font-bold mb-4">Sunrise PG • Room 101A</p>
-          <div className="px-4 py-2 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-xl text-sm font-bold flex items-center gap-2">
+          <div className="px-4 py-2 bg-emerald-50 text-emerald-700 border border-emerald-200/80 rounded-xl text-xs font-bold flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4" />
-            Valid Identity
+            <span>Valid Resident Gate Pass</span>
           </div>
         </div>
       )}

@@ -5,7 +5,8 @@ import {
   ScribbleComplaint,
   ScribblePlus,
   ScribbleUsers,
-  ScribbleClock
+  ScribbleClock,
+  ScribbleTicketIllustration
 } from './ScribbleIcons';
 import { X, ChevronDown, Check, Filter } from 'lucide-react';
 
@@ -103,10 +104,10 @@ export const ComplaintsView: React.FC = () => {
       {/* Top Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
-          <ScribbleComplaint className="w-8 h-8 text-[#003087] stroke-[2.4]" />
+          <ScribbleTicketIllustration className="w-10 h-10 text-[#003087] dark:text-[#f8fafc] flex-shrink-0" />
           <div>
-            <h2 className="text-xl sm:text-2xl font-extrabold text-[#012169]">Operation Ticket Center</h2>
-            <p className="text-xs sm:text-sm font-semibold text-slate-500">Urgent operational issues & maintenance tracking</p>
+            <h2 className="text-xl sm:text-2xl font-extrabold text-[#012169] dark:text-[#f8fafc] tracking-tight">Operation Ticket Center</h2>
+            <p className="text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400">Urgent operational issues & maintenance tracking</p>
           </div>
         </div>
 
@@ -115,11 +116,11 @@ export const ComplaintsView: React.FC = () => {
           <div ref={filterRef} className="relative">
             <button
               onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
-              className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 hover:bg-[#f0f7ff] text-[#003087] font-extrabold text-xs sm:text-sm shadow-xs flex items-center gap-2 transition-all"
+              className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 hover:bg-[#f0f7ff] text-[#003087] font-extrabold text-xs sm:text-sm shadow-xs flex items-center gap-2 transition-all cursor-pointer"
             >
               <Filter className="w-4 h-4 text-[#009cde]" />
               <span>Status: <strong className="text-[#012169]">{filterStatus}</strong></span>
-              <span className="px-2 py-0.5 rounded-full text-xs font-black bg-[#e0f2fe] text-[#003087]">
+              <span className="px-2 py-0.5 rounded-md text-xs font-black bg-[#f0f7ff] text-[#003087] border border-[#009cde]/30">
                 {filterStatus === 'All' ? complaints.length : complaints.filter(c => c.status === filterStatus).length}
               </span>
               <ChevronDown className="w-4 h-4 text-slate-400" />
@@ -140,13 +141,13 @@ export const ComplaintsView: React.FC = () => {
                         setFilterStatus(st);
                         setIsFilterDropdownOpen(false);
                       }}
-                      className={`w-full px-4 py-2.5 text-xs sm:text-sm font-extrabold flex items-center justify-between transition-colors ${
+                      className={`w-full px-4 py-2.5 text-xs sm:text-sm font-extrabold flex items-center justify-between transition-colors cursor-pointer ${
                         isSelected ? 'bg-[#f0f7ff] text-[#003087]' : 'text-slate-700 hover:bg-slate-50'
                       }`}
                     >
                       <span>{st}</span>
                       <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 rounded-full text-xs font-black bg-[#e0f2fe] text-[#003087]">
+                        <span className="px-2 py-0.5 rounded-md text-xs font-black bg-[#f0f7ff] text-[#003087] border border-[#009cde]/30">
                           {count}
                         </span>
                         {isSelected && <Check className="w-4 h-4 text-[#009cde]" />}

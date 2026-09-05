@@ -1,28 +1,26 @@
 import React from 'react';
 import { Nav } from '../components/layout/Nav';
 import { Hero } from '../components/sections/Hero';
-import { ProofStrip } from '../components/sections/ProofStrip';
-import { FeaturesList } from '../components/sections/FeaturesList';
-import { StatsSection } from '../components/sections/StatsSection';
+import { ValueStrip } from '../components/sections/ValueStrip';
 import { HowItWorks } from '../components/sections/HowItWorks';
-import { Testimonial } from '../components/sections/Testimonial';
-import { FinalCTA } from '../components/sections/FinalCTA';
+import { FeaturesGrid } from '../components/sections/FeaturesGrid';
+import { Testimonials } from '../components/sections/Testimonials';
 import { FAQ } from '../components/sections/FAQ';
+import { LandlordCTA } from '../components/sections/LandlordCTA';
 import { Footer } from '../components/sections/Footer';
 
 export const LandingPage: React.FC = () => {
   return (
-    <div className="relative min-h-screen bg-[#FAFAF8] text-[#14151A] font-sans selection:bg-[#2454FF] selection:text-white">
+    <div className="relative min-h-screen bg-[#FBFBFA] text-[#012169] font-sans selection:bg-[#003087] selection:text-white">
       <Nav />
       <main>
         <Hero />
-        <ProofStrip />
-        <FeaturesList />
-        <StatsSection />
+        <ValueStrip />
         <HowItWorks />
-        <Testimonial />
-        <FinalCTA />
+        <FeaturesGrid />
+        <Testimonials />
         <FAQ />
+        <LandlordCTA />
       </main>
       <Footer />
     </div>

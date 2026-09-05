@@ -95,7 +95,7 @@ export const HelpCenterView: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredFaqs.map((item, index) => (
             <div key={index} className="p-6 rounded-3xl bg-[#f8fafc] border border-slate-200 shadow-sm space-y-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#e0f2fe] text-[#003087]">
+              <span className="px-2.5 py-0.5 rounded-md text-[10px] font-extrabold bg-[#f0f7ff] text-[#003087] border border-[#009cde]/30">
                 {item.cat}
               </span>
               <h4 className="text-base font-extrabold text-[#012169] mt-2">{item.q}</h4>

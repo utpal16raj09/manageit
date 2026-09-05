@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { useProperty } from '../context/PropertyContext';
 import {
-  ScribbleWallet,
-  ScribbleClock,
-  ScribbleCheck,
   ScribbleChart,
-  ScribbleMoney
+  ScribbleMoney,
+  ScribbleChevron
 } from './ScribbleIcons';
-import { ArrowUpRight, ChevronRight, X } from 'lucide-react';
+import { ArrowUpRight, X } from 'lucide-react';
 
 export const MoneyStrip: React.FC = () => {
   const { filteredMetrics, payments, tenants, setSelectedReceiptPayment } = useProperty();
@@ -20,38 +18,41 @@ export const MoneyStrip: React.FC = () => {
   const overdueTenants = tenants.filter(t => t.duesStatus !== 'paid');
 
   return (
-    <div className="space-y-4 font-sans">
+    <div className="space-y-3.5 font-sans">
       <div className="flex items-center justify-between">
-        <h2 className="text-base sm:text-lg font-extrabold text-[#012169] flex items-center gap-2">
-          <ScribbleMoney className="w-5 h-5 text-[#009cde]" />
+        <h2 className="text-sm sm:text-base font-extrabold text-[#012169] dark:text-[#f8fafc] flex items-center gap-2">
+          <ScribbleMoney className="w-4.5 h-4.5 text-[#009cde]" />
           <span>Financial Collection Engine</span>
         </h2>
-        <div className="flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-[#003087] bg-[#e0f2fe] px-3.5 py-1 rounded-full border border-[#009cde]/30 shadow-xs">
+        <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#003087] dark:text-[#93c5fd] bg-[#f0f7ff] dark:bg-white/[0.05] border border-blue-100/60 dark:border-white/[0.06] px-2.5 py-0.5 rounded-lg shadow-2xs">
           <ScribbleChart className="w-3.5 h-3.5 text-[#009cde]" />
           <span>Efficiency: {filteredMetrics.collectionEfficiencyPct}%</span>
         </div>
       </div>
 
-      {/* 3 Executive Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* 3 Executive Cards - 4x Spacing for Compact Card Widths */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-14 lg:gap-20 xl:gap-24 w-full">
         {/* Today's Collection Card */}
         <div
           onClick={() => setActiveModal('today')}
-          className="mustard-screen-card p-6 sm:p-7 rounded-3xl cursor-pointer relative overflow-hidden group border-slate-200 bg-white shadow-sm hover:shadow-md transition-all"
+          className="mustard-screen-card p-3.5 sm:p-4 rounded-xl cursor-pointer relative overflow-hidden group bg-transparent dark:bg-transparent shadow-none hover:border-slate-300 dark:hover:border-white/[0.16] transition-all duration-200 w-full flex flex-col justify-between items-center text-center min-h-[120px] sm:min-h-[128px]"
         >
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-xs sm:text-sm font-extrabold text-[#012169] uppercase tracking-wider">Today's Collection</span>
-            <ScribbleWallet className="w-5 h-5 text-[#003087] stroke-[2.4] group-hover:scale-110 transition-transform" />
+          <div className="w-full flex flex-col items-center">
+            <div className="text-[10px] font-extrabold text-[#012169] dark:text-slate-400 uppercase tracking-wider truncate mb-1 text-center w-full">
+              Today's Collection
+            </div>
+            <div className="text-lg sm:text-xl font-extrabold text-[#003087] dark:text-[#f8fafc] font-mono-amount tracking-tight text-center w-full">
+              {formatCurrency(filteredMetrics.todayCollection)}
+            </div>
+            <div className="mt-1.5 flex justify-center w-full">
+              <span className="inline-flex items-center gap-1 text-[#003087] dark:text-[#93c5fd] font-extrabold bg-[#e0f2fe] dark:bg-white/[0.06] px-2 py-0.5 rounded-md text-[10px] whitespace-nowrap">
+                <ArrowUpRight className="w-2.5 h-2.5 text-[#009cde]" /> +14.2% today
+              </span>
+            </div>
           </div>
-          <div className="text-3xl sm:text-4xl font-extrabold text-[#003087] font-mono-amount tracking-tight">
-            {formatCurrency(filteredMetrics.todayCollection)}
-          </div>
-          <div className="mt-5 flex items-center justify-between text-xs sm:text-sm border-t border-slate-100 pt-4">
-            <span className="flex items-center gap-1 text-[#003087] font-extrabold bg-[#e0f2fe] px-3 py-1 rounded-lg border border-[#009cde]/30">
-              <ArrowUpRight className="w-3.5 h-3.5 text-[#009cde]" /> +14.2% today
-            </span>
-            <span className="text-[#009cde] font-extrabold group-hover:translate-x-1 transition-transform flex items-center">
-              View ({todayPayments.length}) <ChevronRight className="w-4 h-4 ml-0.5" />
+          <div className="pt-2 flex items-center justify-center text-xs border-t border-slate-100 dark:border-white/[0.06] mt-2 w-full">
+            <span className="text-[11px] font-extrabold text-[#009cde] group-hover:translate-x-0.5 transition-transform flex items-center justify-center gap-1 whitespace-nowrap">
+              View ({todayPayments.length}) <ScribbleChevron className="w-3 h-3" />
             </span>
           </div>
         </div>
@@ -59,52 +60,57 @@ export const MoneyStrip: React.FC = () => {
         {/* This Month's Dues Card */}
         <div
           onClick={() => setActiveModal('dues')}
-          className="mustard-screen-card p-6 sm:p-7 rounded-3xl cursor-pointer relative overflow-hidden group border-slate-200 bg-white shadow-sm hover:shadow-md transition-all"
+          className="mustard-screen-card p-3.5 sm:p-4 rounded-xl cursor-pointer relative overflow-hidden group bg-transparent dark:bg-transparent shadow-none hover:border-slate-300 dark:hover:border-white/[0.16] transition-all duration-200 w-full flex flex-col justify-between items-center text-center min-h-[120px] sm:min-h-[128px]"
         >
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-xs sm:text-sm font-extrabold text-[#012169] uppercase tracking-wider">This Month's Dues</span>
-            <ScribbleClock className="w-5 h-5 text-[#003087] stroke-[2.4] group-hover:scale-110 transition-transform" />
+          <div className="w-full flex flex-col items-center">
+            <div className="text-[10px] font-extrabold text-[#012169] dark:text-slate-400 uppercase tracking-wider truncate mb-1 text-center w-full">
+              This Month's Dues
+            </div>
+            <div className="text-lg sm:text-xl font-extrabold text-[#003087] dark:text-[#f8fafc] font-mono-amount tracking-tight text-center w-full">
+              {formatCurrency(filteredMetrics.duesThisMonth)}
+            </div>
+            <div className="mt-1.5 flex justify-center w-full">
+              <span className="inline-flex items-center text-[#003087] dark:text-slate-300 font-extrabold bg-[#f1f5f9] dark:bg-white/[0.06] px-2 py-0.5 rounded-md text-[10px] whitespace-nowrap">
+                {overdueTenants.length} tenants pending
+              </span>
+            </div>
           </div>
-          <div className="text-3xl sm:text-4xl font-extrabold text-[#003087] font-mono-amount tracking-tight">
-            {formatCurrency(filteredMetrics.duesThisMonth)}
-          </div>
-          <div className="mt-5 flex items-center justify-between text-xs sm:text-sm border-t border-slate-100 pt-4">
-            <span className="text-[#003087] font-extrabold bg-[#f1f5f9] px-3 py-1 rounded-lg border border-slate-200">
-              {overdueTenants.length} tenants pending
-            </span>
-            <span className="text-[#009cde] font-extrabold group-hover:translate-x-1 transition-transform flex items-center">
-              Collect Now <ChevronRight className="w-4 h-4 ml-0.5" />
+          <div className="pt-2 flex items-center justify-center text-xs border-t border-slate-100 dark:border-white/[0.06] mt-2 w-full">
+            <span className="text-[11px] font-extrabold text-[#009cde] group-hover:translate-x-0.5 transition-transform flex items-center justify-center gap-1 whitespace-nowrap">
+              Collect Now <ScribbleChevron className="w-3 h-3" />
             </span>
           </div>
         </div>
 
         {/* Monthly Target Progress Card */}
-        <div className="mustard-screen-card p-6 sm:p-7 rounded-3xl relative overflow-hidden border-slate-200 bg-white shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-xs sm:text-sm font-extrabold text-[#012169] uppercase tracking-wider">Monthly Rent Target</span>
-            <ScribbleCheck className="w-5 h-5 text-[#003087] stroke-[2.4]" />
-          </div>
-
-          <div className="flex items-baseline justify-between gap-2 flex-wrap">
-            <span className="text-2xl sm:text-3xl font-extrabold text-[#003087] font-mono-amount tracking-tight">
-              {formatCurrency(filteredMetrics.collectedThisMonth)}
-            </span>
-            <span className="text-xs sm:text-sm text-slate-500 font-mono-amount font-bold">
-              / {formatCurrency(filteredMetrics.expectedRent)}
-            </span>
-          </div>
-
-          <div className="mt-4 space-y-2">
-            <div className="w-full h-3 rounded-full bg-slate-100 overflow-hidden p-0.5 border border-slate-200">
-              <div
-                className="h-full rounded-full bg-[#009cde] transition-all duration-700 shadow-xs"
-                style={{ width: `${Math.min(100, filteredMetrics.collectionEfficiencyPct)}%` }}
-              />
+        <div className="mustard-screen-card p-3.5 sm:p-4 rounded-xl relative overflow-hidden bg-transparent dark:bg-transparent shadow-none hover:border-slate-300 dark:hover:border-white/[0.16] transition-all duration-200 w-full flex flex-col justify-between items-center text-center min-h-[120px] sm:min-h-[128px]">
+          <div className="w-full flex flex-col items-center">
+            <div className="text-[10px] font-extrabold text-[#012169] dark:text-slate-400 uppercase tracking-wider truncate mb-1 text-center w-full">
+              Monthly Rent Target
             </div>
-            <div className="flex justify-between text-xs sm:text-sm text-[#012169] font-extrabold">
-              <span className="text-[#009cde]">{filteredMetrics.collectionEfficiencyPct}% collected</span>
-              <span>Target: {formatCurrency(filteredMetrics.expectedRent)}</span>
+
+            <div className="flex items-baseline justify-center gap-1.5 flex-wrap w-full text-center">
+              <span className="text-base sm:text-lg font-extrabold text-[#003087] dark:text-[#f8fafc] font-mono-amount tracking-tight">
+                {formatCurrency(filteredMetrics.collectedThisMonth)}
+              </span>
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono-amount font-bold">
+                / {formatCurrency(filteredMetrics.expectedRent)}
+              </span>
             </div>
+
+            <div className="mt-1.5 space-y-1 w-full max-w-xs mx-auto">
+              <div className="w-full h-1.5 rounded-full bg-slate-100 dark:bg-white/[0.06] overflow-hidden p-0.5">
+                <div
+                  className="h-full rounded-full bg-[#009cde] transition-all duration-700 shadow-xs"
+                  style={{ width: `${Math.min(100, filteredMetrics.collectionEfficiencyPct)}%` }}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="pt-2 flex items-center justify-center gap-2.5 text-[10px] text-[#012169] dark:text-slate-300 font-extrabold border-t border-slate-100 dark:border-white/[0.06] mt-2 w-full">
+            <span className="text-[#009cde]">{filteredMetrics.collectionEfficiencyPct}% collected</span>
+            <span className="text-slate-300 dark:text-white/20">•</span>
+            <span className="text-slate-400 dark:text-slate-500">Target: {formatCurrency(filteredMetrics.expectedRent)}</span>
           </div>
         </div>
       </div>

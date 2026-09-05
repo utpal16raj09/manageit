@@ -5,7 +5,11 @@ interface IconProps {
   size?: number;
 }
 
-export const PropPulseLogo: React.FC<IconProps> = ({ className = "w-8 h-8", size }) => (
+export const PropPulseLogo: React.FC<IconProps & { isDarkBg?: boolean }> = ({ 
+  className = "w-8 h-8", 
+  size,
+  isDarkBg = false 
+}) => (
   <svg
     width={size || 32}
     height={size || 32}
@@ -17,22 +21,22 @@ export const PropPulseLogo: React.FC<IconProps> = ({ className = "w-8 h-8", size
     {/* Architectural Building Structure */}
     <path
       d="M5 28V9C5 7.89543 5.89543 7 7 7H25C26.1046 7 27 7.89543 27 9V28"
-      stroke="#003087"
+      stroke={isDarkBg ? "#FFFFFF" : "#003087"}
       strokeWidth="2.8"
       strokeLinecap="round"
     />
     <path
       d="M12 7V4C12 3.44772 12.4477 3 13 3H19C19.5523 3 20 3.44772 20 4V7"
-      stroke="#003087"
+      stroke={isDarkBg ? "#FFFFFF" : "#003087"}
       strokeWidth="2.4"
       strokeLinecap="round"
     />
 
     {/* Windows grid */}
-    <rect x="9" y="11" width="3" height="3" rx="0.8" fill="#003087" opacity="0.85" />
-    <rect x="20" y="11" width="3" height="3" rx="0.8" fill="#003087" opacity="0.85" />
-    <rect x="9" y="16" width="3" height="3" rx="0.8" fill="#003087" opacity="0.85" />
-    <rect x="20" y="16" width="3" height="3" rx="0.8" fill="#003087" opacity="0.85" />
+    <rect x="9" y="11" width="3" height="3" rx="0.8" fill={isDarkBg ? "#7DD3FC" : "#003087"} opacity={isDarkBg ? 0.95 : 0.85} />
+    <rect x="20" y="11" width="3" height="3" rx="0.8" fill={isDarkBg ? "#7DD3FC" : "#003087"} opacity={isDarkBg ? 0.95 : 0.85} />
+    <rect x="9" y="16" width="3" height="3" rx="0.8" fill={isDarkBg ? "#7DD3FC" : "#003087"} opacity={isDarkBg ? 0.95 : 0.85} />
+    <rect x="20" y="16" width="3" height="3" rx="0.8" fill={isDarkBg ? "#7DD3FC" : "#003087"} opacity={isDarkBg ? 0.95 : 0.85} />
 
     {/* Pulse Telemetry Wave - Bright Cerulean Blue */}
     <path
@@ -44,6 +48,7 @@ export const PropPulseLogo: React.FC<IconProps> = ({ className = "w-8 h-8", size
     />
   </svg>
 );
+
 
 export const ScribbleBuilding: React.FC<IconProps> = ({ className = "w-6 h-6", size }) => (
   <svg
@@ -383,5 +388,161 @@ export const ScribbleChevron: React.FC<IconProps> = ({ className = "w-6 h-6", si
     className={className}
   >
     <path d="M9 18l6-6-6-6" />
+  </svg>
+);
+
+/* ==========================================================================
+   Bespoke Hand-Drawn Sketch Character Illustrations for Each Page
+   - Style: Minimal, organic, scribbled character art
+   - Scalable, compact, dual-tone (#009cde accents + currentColor stroke)
+   ========================================================================== */
+
+/** 1. Properties & Units Character: Cute architect with blueprint & building sketch */
+export const ScribblePropertyIllustration: React.FC<IconProps> = ({ className = "w-9 h-9", size }) => (
+  <svg
+    width={size || 36}
+    height={size || 36}
+    viewBox="0 0 48 48"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    {/* Sketch Building Backdrop */}
+    <path d="M6 42V14C6 12.8 7 12 8.2 12H24V42" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M24 6H38C39.2 6 40.2 7 40.2 8.2V42" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M4 42H44" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" />
+    {/* Scribbled windows */}
+    <rect x="11" y="17" width="4" height="4" rx="1" stroke="#009cde" strokeWidth="2" />
+    <rect x="11" y="25" width="4" height="4" rx="1" stroke="#009cde" strokeWidth="2" />
+    <rect x="29" y="12" width="5" height="5" rx="1" stroke="#009cde" strokeWidth="2" />
+    <rect x="29" y="21" width="5" height="5" rx="1" stroke="#009cde" strokeWidth="2" />
+    {/* Cute Scribbled Inspector Character */}
+    <circle cx="34" cy="34" r="5" stroke="currentColor" strokeWidth="2.4" />
+    <path d="M32 33.5C32.5 33 33.5 33 34 33.5M36 33.5C36.5 33 37.5 33 38 33.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    <path d="M33 36C34 37 35.5 37 36.5 36" stroke="#009cde" strokeWidth="2" strokeLinecap="round" />
+    {/* Little Hard Hat */}
+    <path d="M29 32C29.5 28 38.5 28 39 32H29Z" fill="#009cde" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+    {/* Blueprint Scroll in hand */}
+    <path d="M25 38L21 41M21 41L23 37M21 41H27" stroke="#009cde" strokeWidth="2.2" strokeLinecap="round" />
+  </svg>
+);
+
+/** 2. Complaints & Tickets Character: Friendly repair droid / fixer with wrench */
+export const ScribbleTicketIllustration: React.FC<IconProps> = ({ className = "w-9 h-9", size }) => (
+  <svg
+    width={size || 36}
+    height={size || 36}
+    viewBox="0 0 48 48"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    {/* Chat Bubble Base */}
+    <path d="M8 10C8 7.8 9.8 6 12 6H36C38.2 6 40 7.8 40 10V28C40 30.2 38.2 32 36 32H20L12 38V32H12C9.8 32 8 30.2 8 28V10Z" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+    {/* Scribbled Fixer Character Head inside bubble */}
+    <circle cx="21" cy="18" r="6" stroke="currentColor" strokeWidth="2.4" />
+    <path d="M19 17C19.5 16.5 20.5 16.5 21 17M23 17C23.5 16.5 24.5 16.5 25 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    <path d="M20 20.5C21 21.5 22.5 21.5 23.5 20.5" stroke="#009cde" strokeWidth="2" strokeLinecap="round" />
+    {/* Antenna sparkle */}
+    <path d="M21 12V9M21 9L23 7M21 9L19 7" stroke="#009cde" strokeWidth="2" strokeLinecap="round" />
+    {/* Hand-drawn Wrench Tool */}
+    <path d="M30 14L35 19M34 13L32 15M36 17L38 19" stroke="#009cde" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+    {/* Resolution checkmark spark */}
+    <path d="M30 26L32.5 28.5L37 23" stroke="#009cde" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+/** 3. Financials & Accounting Character: Little ledger & coin wealth character */
+export const ScribbleFinanceIllustration: React.FC<IconProps> = ({ className = "w-9 h-9", size }) => (
+  <svg
+    width={size || 36}
+    height={size || 36}
+    viewBox="0 0 48 48"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    {/* Ledger Book */}
+    <rect x="7" y="10" width="22" height="30" rx="3" stroke="currentColor" strokeWidth="2.6" />
+    <path d="M12 17H23M12 23H23M12 29H18" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+    <path d="M7 14H29" stroke="#009cde" strokeWidth="2" />
+    {/* Cute Scribbled Coin Stack Character */}
+    <ellipse cx="36" cy="36" rx="7" ry="3.5" stroke="currentColor" strokeWidth="2.4" />
+    <ellipse cx="36" cy="30" rx="7" ry="3.5" stroke="currentColor" strokeWidth="2.4" />
+    <ellipse cx="36" cy="24" rx="7" ry="3.5" stroke="currentColor" strokeWidth="2.4" />
+    {/* Face on top coin */}
+    <path d="M33 23C33.5 22.5 34.2 22.5 34.7 23M37 23C37.5 22.5 38.2 22.5 38.7 23" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    <path d="M34.5 25.5C35.5 26.5 36.8 26.5 37.8 25.5" stroke="#009cde" strokeWidth="1.8" strokeLinecap="round" />
+    {/* Sparkle Growth Arrow */}
+    <path d="M26 12L34 5M34 5H29M34 5V10" stroke="#009cde" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M41 12L43 14M43 12L41 14" stroke="#009cde" strokeWidth="2" strokeLinecap="round" />
+  </svg>
+);
+
+/** 4. Tenant Portal Character: Cozy resident with key and home coffee */
+export const ScribbleTenantIllustration: React.FC<IconProps> = ({ className = "w-9 h-9", size }) => (
+  <svg
+    width={size || 36}
+    height={size || 36}
+    viewBox="0 0 48 48"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    {/* Cottage Roof Outline */}
+    <path d="M6 22L24 7L42 22" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M11 20V40C11 41.1 11.9 42 13 42H35C36.1 42 37 41.1 37 40V20" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
+    {/* Cozy Resident Character */}
+    <circle cx="24" cy="27" r="5.5" stroke="currentColor" strokeWidth="2.4" />
+    <path d="M22 26C22.4 25.5 23 25.5 23.4 26M25 26C25.4 25.5 26 25.5 26.4 26" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    <path d="M23 29C23.8 30 24.8 30 25.5 29" stroke="#009cde" strokeWidth="1.8" strokeLinecap="round" />
+    {/* Digital Key */}
+    <circle cx="16" cy="35" r="2.5" stroke="#009cde" strokeWidth="2" />
+    <path d="M18.5 35H23M21 35V37" stroke="#009cde" strokeWidth="2" strokeLinecap="round" />
+    {/* Chimney smoke curl */}
+    <path d="M34 13V10H31V15M33 7C34 5.5 33 4 35 3" stroke="#009cde" strokeWidth="2" strokeLinecap="round" />
+  </svg>
+);
+
+/** 5. Settings & Config Character: Quirky wrench & switch character */
+export const ScribbleSettingsIllustration: React.FC<IconProps> = ({ className = "w-9 h-9", size }) => (
+  <svg
+    width={size || 36}
+    height={size || 36}
+    viewBox="0 0 48 48"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    {/* Gear Character */}
+    <circle cx="24" cy="24" r="10" stroke="currentColor" strokeWidth="2.6" />
+    <circle cx="24" cy="24" r="4.5" stroke="#009cde" strokeWidth="2" />
+    {/* Gear teeth */}
+    <path d="M24 10V6M24 42V38M10 24H6M42 24H38M14 14L11 11M37 37L34 34M14 34L11 37M37 11L34 14" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
+    {/* Friendly Eyes on Gear */}
+    <path d="M22 22C22.3 21.5 22.8 21.5 23.1 22M25 22C25.3 21.5 25.8 21.5 26.1 22" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    <path d="M23 25C23.6 25.8 24.4 25.8 25 25" stroke="#009cde" strokeWidth="1.6" strokeLinecap="round" />
+  </svg>
+);
+
+/** 6. Help Center Character: Friendly rescue bot with lifebuoy */
+export const ScribbleHelpIllustration: React.FC<IconProps> = ({ className = "w-9 h-9", size }) => (
+  <svg
+    width={size || 36}
+    height={size || 36}
+    viewBox="0 0 48 48"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    {/* Lifebuoy Ring */}
+    <circle cx="24" cy="24" r="14" stroke="currentColor" strokeWidth="2.6" />
+    <circle cx="24" cy="24" r="7" stroke="currentColor" strokeWidth="2.4" />
+    <path d="M19 14L15 19M29 14L33 19M19 34L15 29M29 34L33 29" stroke="#009cde" strokeWidth="2.6" strokeLinecap="round" />
+    {/* Friendly Face inside center */}
+    <path d="M22 22C22.4 21.6 22.8 21.6 23.2 22M25 22C25.4 21.6 25.8 21.6 26.2 22" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    <path d="M23 25C23.8 26 24.8 26 25.5 25" stroke="#009cde" strokeWidth="1.8" strokeLinecap="round" />
+    {/* Sparkles */}
+    <path d="M38 10L41 7M41 10L38 7" stroke="#009cde" strokeWidth="2" strokeLinecap="round" />
   </svg>
 );

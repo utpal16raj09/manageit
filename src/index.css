@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *));
+
 :root {
   /* PropPulse PayPal Blue Brand System */
   --bg: #f8fafc;
@@ -69,6 +71,7 @@ body {
   background-color: #ffffff;
   border: 1px solid var(--hairline);
   box-shadow: 0 1px 2px rgba(20, 21, 26, 0.04);
+  color: #012169;
   transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
 }
 
@@ -76,3 +79,819 @@ body {
   border-color: var(--accent);
   box-shadow: 0 4px 20px rgba(36, 84, 255, 0.08);
 }
+
+.mustard-screen-card {
+  background-color: transparent;
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  box-shadow: none;
+  color: #012169;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+.mustard-screen-card:hover {
+  border-color: #cbd5e1;
+  background-color: rgba(0, 48, 135, 0.02);
+}
+
+.font-mono-amount {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+  color: #003087;
+}
+
+[data-theme="dark"] .font-mono-amount,
+.dark .font-mono-amount {
+  color: #f8fafc !important;
+}
+
+/* ==========================================================================
+   PropPulse Charcoal Black & Off-White Pure Luxury Theme Layer
+   - Aesthetic: Silky Charcoal Black (#0b0e14 / #121722), Crisp Off-White (#f8fafc / #f1f5f9)
+   - Cards: Charcoal Solid/Frosted Glass with micro-hairlines
+   - Sidebar: Clean transparent hover & refined white active pill
+   - Typography: Clean off-white & slate tones in dark mode; deep navy & blue in light mode
+   - Preserves 100% of Light Mode with high-contrast deep blue
+   ========================================================================== */
+
+[data-theme="dark"],
+.dark {
+  --bg: #0b0e14;
+  --bg-secondary: #121722;
+  --card-bg: #121722;
+  --card-bg-secondary: #161c28;
+  --well-bg: #161c28;
+  --panel-secondary: #121722;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-secondary: rgba(255, 255, 255, 0.06);
+  --ink: #f8fafc;
+  --ink-muted: #94a3b8;
+  --accent: #f8fafc;
+  --accent-bright: #ffffff;
+  --hairline: rgba(255, 255, 255, 0.08);
+  color-scheme: dark;
+}
+
+[data-theme="dark"] body:has(.dashboard-root),
+.dark body:has(.dashboard-root) {
+  background-color: #0b0e14 !important;
+  background-image: none !important;
+  color: #f8fafc !important;
+}
+
+/* Dashboard Root Container */
+[data-theme="dark"] .dashboard-root,
+.dark .dashboard-root {
+  background-color: #0b0e14 !important;
+  background-image: none !important;
+  color: #f8fafc !important;
+}
+
+/* Authentic Glass Cards & Panels (Solid Surfaces with Micro-borders) */
+[data-theme="dark"] .dashboard-root .bg-white,
+[data-theme="dark"] .dashboard-root .card-clean,
+.dark .dashboard-root .bg-white,
+.dark .dashboard-root .card-clean {
+  background: #121722 !important;
+  color: #f8fafc !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.5) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+[data-theme="dark"] .dashboard-root .bg-white:hover,
+[data-theme="dark"] .dashboard-root .card-clean:hover,
+.dark .dashboard-root .bg-white:hover,
+.dark .dashboard-root .card-clean:hover {
+  background: #161c28 !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Subtle High-End Stat Tiles (Transparent Boxes matching BG) */
+.status-stat-card {
+  background-color: transparent !important;
+  background: transparent !important;
+  border: 1px solid #e2e8f0;
+  box-shadow: none !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+  transform: translateZ(0);
+}
+.status-stat-card:hover {
+  border-color: #cbd5e1;
+  background-color: rgba(0, 48, 135, 0.02) !important;
+}
+
+/* Transparent Boxes for Money & Status Strips in Dark Mode */
+[data-theme="dark"] .dashboard-root .mustard-screen-card,
+.dark .dashboard-root .mustard-screen-card,
+[data-theme="dark"] .dashboard-root .status-stat-card,
+.dark .dashboard-root .status-stat-card {
+  background-color: transparent !important;
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .dashboard-root .mustard-screen-card:hover,
+.dark .dashboard-root .mustard-screen-card:hover,
+[data-theme="dark"] .dashboard-root .status-stat-card:hover,
+.dark .dashboard-root .status-stat-card:hover {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  box-shadow: none !important;
+}
+
+/* Header & Sidebar Surfaces (Translucent Glassmorphic) */
+[data-theme="dark"] .dashboard-root header,
+[data-theme="dark"] .dashboard-root header.bg-white,
+[data-theme="dark"] .dashboard-root aside,
+[data-theme="dark"] .dashboard-root aside.bg-white,
+.dark .dashboard-root header,
+.dark .dashboard-root header.bg-white,
+.dark .dashboard-root aside,
+.dark .dashboard-root aside.bg-white {
+  background: rgba(13, 16, 22, 0.88) !important;
+  backdrop-filter: blur(32px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
+  border: none !important;
+  border-color: transparent !important;
+  color: #f8fafc !important;
+  box-shadow: none !important;
+}
+
+[data-theme="dark"] .dashboard-root header input,
+[data-theme="dark"] .dashboard-root header button,
+.dark .dashboard-root header input,
+.dark .dashboard-root header button {
+  border: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+[data-theme="dark"] .dashboard-root .fixed.bottom-0.bg-white\/95,
+[data-theme="dark"] .dashboard-root .lg\:hidden.bg-white\/95,
+.dark .dashboard-root .fixed.bottom-0.bg-white\/95,
+.dark .dashboard-root .lg\:hidden.bg-white\/95 {
+  background: rgba(12, 14, 20, 0.88) !important;
+  backdrop-filter: blur(28px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+  border: none !important;
+  border-color: transparent !important;
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Nested Sub-wells & Badges */
+[data-theme="dark"] .dashboard-root .bg-\[\#f1f5f9\],
+[data-theme="dark"] .dashboard-root .bg-\[\#f8fafc\],
+[data-theme="dark"] .dashboard-root .bg-\[\#fcfcfd\],
+[data-theme="dark"] .dashboard-root .bg-slate-50,
+[data-theme="dark"] .dashboard-root .bg-slate-50\/50,
+[data-theme="dark"] .dashboard-root .bg-slate-100,
+.dark .dashboard-root .bg-\[\#f1f5f9\],
+.dark .dashboard-root .bg-\[\#f8fafc\],
+.dark .dashboard-root .bg-\[\#fcfcfd\],
+.dark .dashboard-root .bg-slate-50,
+.dark .dashboard-root .bg-slate-50\/50,
+.dark .dashboard-root .bg-slate-100 {
+  background: rgba(255, 255, 255, 0.04) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  color: #f8fafc !important;
+  box-shadow: none !important;
+  transition: background 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Blue Wells in Dark Mode */
+[data-theme="dark"] .dashboard-root .bg-\[\#f0f7ff\],
+[data-theme="dark"] .dashboard-root .bg-\[\#e0f2fe\],
+[data-theme="dark"] .dashboard-root .bg-blue-50,
+.dark .dashboard-root .bg-\[\#f0f7ff\],
+.dark .dashboard-root .bg-\[\#e0f2fe\],
+.dark .dashboard-root .bg-blue-50 {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  color: #f8fafc !important;
+  box-shadow: none !important;
+}
+
+[data-theme="dark"] .dashboard-root .bg-\[\#f1f5f9\] *,
+[data-theme="dark"] .dashboard-root .bg-\[\#f8fafc\] *,
+[data-theme="dark"] .dashboard-root .bg-\[\#e0f2fe\] *,
+[data-theme="dark"] .dashboard-root .bg-\[\#f0f7ff\] *,
+.dark .dashboard-root .bg-\[\#f1f5f9\] *,
+.dark .dashboard-root .bg-\[\#f8fafc\] *,
+.dark .dashboard-root .bg-\[\#e0f2fe\] *,
+.dark .dashboard-root .bg-\[\#f0f7ff\] * {
+  color: inherit;
+}
+
+/* Translucent Sidebar & List Row Hover States */
+[data-theme="dark"] .dashboard-root .hover\:bg-\[\#f0f7ff\]:hover,
+[data-theme="dark"] .dashboard-root .hover\:bg-\[\#f8fafc\]:hover,
+[data-theme="dark"] .dashboard-root .hover\:bg-slate-50:hover,
+[data-theme="dark"] .dashboard-root .hover\:bg-slate-100:hover,
+.dark .dashboard-root .hover\:bg-\[\#f0f7ff\]:hover,
+.dark .dashboard-root .hover\:bg-\[\#f8fafc\]:hover,
+.dark .dashboard-root .hover\:bg-slate-50:hover,
+.dark .dashboard-root .hover\:bg-slate-100:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+[data-theme="dark"] .dashboard-root .hover\:bg-white:hover,
+.dark .dashboard-root .hover\:bg-white:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: transparent !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+[data-theme="dark"] .dashboard-root .hover\:bg-slate-200:hover,
+.dark .dashboard-root .hover\:bg-slate-200:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: transparent !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Active Navigation Item */
+[data-theme="dark"] .dashboard-root aside .bg-\[\#003087\],
+.dark .dashboard-root aside .bg-\[\#003087\] {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: none !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Primary Action Buttons (+ Add, Nudge, Submit) - Clean Solid Dark Surfaces */
+[data-theme="dark"] .dashboard-root .bg-\[\#003087\],
+[data-theme="dark"] .dashboard-root .bg-\[\#009cde\],
+.dark .dashboard-root .bg-\[\#003087\],
+.dark .dashboard-root .bg-\[\#009cde\] {
+  background: #1e293b !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45) !important;
+}
+
+[data-theme="dark"] .dashboard-root .hover\:bg-\[\#0080b8\]:hover,
+.dark .dashboard-root .hover\:bg-\[\#0080b8\]:hover {
+  background: #334155 !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55) !important;
+}
+
+/* Progress Bars */
+[data-theme="dark"] .dashboard-root .h-full.bg-\[\#009cde\],
+[data-theme="dark"] .dashboard-root .h-full.bg-\[\#003087\],
+.dark .dashboard-root .h-full.bg-\[\#009cde\],
+.dark .dashboard-root .h-full.bg-\[\#003087\] {
+  background: #009cde !important;
+  box-shadow: 0 0 8px rgba(0, 156, 222, 0.4) !important;
+}
+
+/* Typography Hierarchy in Dark Mode: Crisp Off-White */
+[data-theme="dark"] .dashboard-root .text-\[\#012169\],
+[data-theme="dark"] .dashboard-root .text-slate-900,
+[data-theme="dark"] .dashboard-root .text-slate-800,
+.dark .dashboard-root .text-\[\#012169\],
+.dark .dashboard-root .text-slate-900,
+.dark .dashboard-root .text-slate-800 {
+  color: #f8fafc !important; 
+}
+
+[data-theme="dark"] .dashboard-root .text-\[\#003087\],
+[data-theme="dark"] .dashboard-root .text-\[\#009cde\],
+.dark .dashboard-root .text-\[\#003087\],
+.dark .dashboard-root .text-\[\#009cde\] {
+  color: #f1f5f9 !important; 
+}
+
+[data-theme="dark"] .dashboard-root .text-slate-700,
+[data-theme="dark"] .dashboard-root .text-slate-600,
+.dark .dashboard-root .text-slate-700,
+.dark .dashboard-root .text-slate-600 {
+  color: #cbd5e1 !important; 
+}
+
+[data-theme="dark"] .dashboard-root .text-slate-500,
+[data-theme="dark"] .dashboard-root .text-slate-400,
+.dark .dashboard-root .text-slate-500,
+.dark .dashboard-root .text-slate-400 {
+  color: #94a3b8 !important; 
+}
+
+[data-theme="dark"] .dashboard-root .text-slate-300,
+.dark .dashboard-root .text-slate-300 {
+  color: #64748b !important;
+}
+
+/* Executive Sub-headers & Section Labels */
+[data-theme="dark"] .dashboard-root .uppercase.tracking-wider,
+.dark .dashboard-root .uppercase.tracking-wider {
+  color: #94a3b8 !important;
+  letter-spacing: 0.08em;
+}
+
+/* Borders and Dividers */
+[data-theme="dark"] .dashboard-root .border-slate-200,
+[data-theme="dark"] .dashboard-root .border-slate-100,
+[data-theme="dark"] .dashboard-root .border-slate-300,
+[data-theme="dark"] .dashboard-root .border-slate-200\/80,
+[data-theme="dark"] .dashboard-root .border-slate-200\/90,
+[data-theme="dark"] .dashboard-root .border-slate-200\/50,
+.dark .dashboard-root .border-slate-200,
+.dark .dashboard-root .border-slate-100,
+.dark .dashboard-root .border-slate-300,
+.dark .dashboard-root .border-slate-200\/80,
+.dark .dashboard-root .border-slate-200\/90,
+.dark .dashboard-root .border-slate-200\/50 {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .dashboard-root .border-\[\#009cde\]\/30,
+[data-theme="dark"] .dashboard-root .border-\[\#009cde\]\/40,
+[data-theme="dark"] .dashboard-root .border-\[\#003087\],
+.dark .dashboard-root .border-\[\#009cde\]\/30,
+.dark .dashboard-root .border-\[\#009cde\]\/40,
+.dark .dashboard-root .border-\[\#003087\] {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Inputs, Textareas, Selects */
+[data-theme="dark"] .dashboard-root input:not([type="checkbox"]):not([type="radio"]),
+[data-theme="dark"] .dashboard-root select,
+[data-theme="dark"] .dashboard-root textarea,
+.dark .dashboard-root input:not([type="checkbox"]):not([type="radio"]),
+.dark .dashboard-root select,
+.dark .dashboard-root textarea {
+  background: rgba(18, 23, 34, 0.75) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #f8fafc !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .dashboard-root input::placeholder,
+[data-theme="dark"] .dashboard-root textarea::placeholder,
+.dark .dashboard-root input::placeholder,
+.dark .dashboard-root textarea::placeholder {
+  color: #64748b !important;
+}
+
+[data-theme="dark"] .dashboard-root input:focus,
+[data-theme="dark"] .dashboard-root select:focus,
+[data-theme="dark"] .dashboard-root textarea:focus,
+.dark .dashboard-root input:focus,
+.dark .dashboard-root select:focus,
+.dark .dashboard-root textarea:focus {
+  border-color: #94a3b8 !important;
+  background: rgba(23, 28, 38, 0.9) !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Status Badges & Pills */
+/* Emerald (Active / Occupied / Positive) */
+[data-theme="dark"] .dashboard-root .bg-emerald-50,
+[data-theme="dark"] .dashboard-root .bg-emerald-100,
+.dark .dashboard-root .bg-emerald-50,
+.dark .dashboard-root .bg-emerald-100 {
+  background: rgba(16, 185, 129, 0.12) !important;
+  border-color: rgba(16, 185, 129, 0.28) !important;
+  color: #6ee7b7 !important;
+}
+
+[data-theme="dark"] .dashboard-root .text-emerald-900,
+[data-theme="dark"] .dashboard-root .text-emerald-700,
+[data-theme="dark"] .dashboard-root .text-emerald-600,
+.dark .dashboard-root .text-emerald-900,
+.dark .dashboard-root .text-emerald-700,
+.dark .dashboard-root .text-emerald-600 {
+  color: #6ee7b7 !important;
+}
+
+/* Amber (Pending / Vacant / Attention) */
+[data-theme="dark"] .dashboard-root .bg-amber-50,
+[data-theme="dark"] .dashboard-root .bg-amber-100,
+[data-theme="dark"] .dashboard-root .bg-amber-50\/50,
+.dark .dashboard-root .bg-amber-50,
+.dark .dashboard-root .bg-amber-100,
+.dark .dashboard-root .bg-amber-50\/50 {
+  background: rgba(245, 158, 11, 0.12) !important;
+  border-color: rgba(245, 158, 11, 0.25) !important;
+  color: #fcd34d !important;
+}
+
+[data-theme="dark"] .dashboard-root .text-amber-900,
+[data-theme="dark"] .dashboard-root .text-amber-700,
+[data-theme="dark"] .dashboard-root .text-amber-600,
+.dark .dashboard-root .text-amber-900,
+.dark .dashboard-root .text-amber-700,
+.dark .dashboard-root .text-amber-600 {
+  color: #fcd34d !important;
+}
+
+/* Rose (Dues / Urgent / Critical / Log Out) */
+[data-theme="dark"] .dashboard-root .bg-rose-50,
+[data-theme="dark"] .dashboard-root .bg-rose-100,
+.dark .dashboard-root .bg-rose-50,
+.dark .dashboard-root .bg-rose-100 {
+  background: rgba(239, 68, 68, 0.1) !important;
+  border-color: rgba(239, 68, 68, 0.22) !important;
+  color: #fca5a5 !important;
+}
+
+[data-theme="dark"] .dashboard-root .text-rose-700,
+[data-theme="dark"] .dashboard-root .text-rose-900,
+[data-theme="dark"] .dashboard-root .text-rose-600,
+.dark .dashboard-root .text-rose-700,
+.dark .dashboard-root .text-rose-900,
+.dark .dashboard-root .text-rose-600 {
+  color: #fca5a5 !important;
+}
+
+[data-theme="dark"] .dashboard-root .hover\:bg-rose-100:hover,
+.dark .dashboard-root .hover\:bg-rose-100:hover {
+  background: rgba(239, 68, 68, 0.18) !important;
+}
+
+/* Progress bar tracks */
+[data-theme="dark"] .dashboard-root .bg-slate-200,
+.dark .dashboard-root .bg-slate-200 {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Pulse indicator dots */
+[data-theme="dark"] .dashboard-root .animate-pulse.bg-\[\#009cde\],
+.dark .dashboard-root .animate-pulse.bg-\[\#009cde\] {
+  background-color: #009cde !important;
+}
+
+/* Floating AI Assistant */
+[data-theme="dark"] .fixed.bottom-20.rounded-full,
+[data-theme="dark"] .fixed.bottom-6.rounded-full,
+.dark .fixed.bottom-20.rounded-full,
+.dark .fixed.bottom-6.rounded-full {
+  background: rgba(18, 23, 34, 0.9) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6) !important;
+}
+
+[data-theme="dark"] .fixed.bottom-20.rounded-full .text-\[\#009cde\],
+[data-theme="dark"] .fixed.bottom-6.rounded-full .text-\[\#009cde\],
+.dark .fixed.bottom-20.rounded-full .text-\[\#009cde\],
+.dark .fixed.bottom-6.rounded-full .text-\[\#009cde\] {
+  color: #f8fafc !important;
+}
+
+/* All Panoramic Banners & Badges - Solid Colors, No Gradients */
+.banner-panoramic {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+  color: #012169 !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.banner-panoramic h1 {
+  color: #012169 !important;
+}
+
+.banner-panoramic .banner-headline {
+  color: #003087 !important;
+}
+
+.banner-panoramic .banner-subtitle {
+  color: #475569 !important;
+}
+
+.banner-panoramic .font-serif {
+  color: #012169 !important;
+}
+
+[data-theme="dark"] .dashboard-root .banner-panoramic,
+.dark .dashboard-root .banner-panoramic {
+  background-color: #121722 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.5) !important;
+  color: #f8fafc !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+[data-theme="dark"] .dashboard-root .banner-panoramic h1,
+.dark .dashboard-root .banner-panoramic h1 {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .dashboard-root .banner-panoramic .banner-headline,
+.dark .dashboard-root .banner-panoramic .banner-headline {
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .dashboard-root .banner-panoramic .banner-subtitle,
+.dark .dashboard-root .banner-panoramic .banner-subtitle {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .dashboard-root .banner-panoramic .font-serif,
+.dark .dashboard-root .banner-panoramic .font-serif {
+  color: #f8fafc !important;
+}
+
+/* Overview Telemetry Badges */
+.overview-badge-default {
+  background-color: #ffffff !important;
+  color: #012169 !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.overview-badge-default span {
+  color: #012169 !important;
+}
+
+.overview-badge-emerald {
+  background-color: #f0fdf4 !important;
+  color: #065f46 !important;
+  border: 1px solid #bbf7d0 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.overview-badge-emerald span {
+  color: #065f46 !important;
+}
+
+[data-theme="dark"] .dashboard-root .overview-badge-default,
+.dark .dashboard-root .overview-badge-default {
+  background-color: #121722 !important;
+  color: #f8fafc !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+[data-theme="dark"] .dashboard-root .overview-badge-default span,
+.dark .dashboard-root .overview-badge-default span {
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .dashboard-root .overview-badge-emerald,
+.dark .dashboard-root .overview-badge-emerald {
+  background-color: #064e3b33 !important;
+  color: #6ee7b7 !important;
+  border: 1px solid rgba(110, 231, 183, 0.25) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+[data-theme="dark"] .dashboard-root .overview-badge-emerald span,
+.dark .dashboard-root .overview-badge-emerald span {
+  color: #6ee7b7 !important;
+}
+
+/* Modals & Dialogs */
+[data-theme="dark"] .bg-\[\#012169\]\/40,
+[data-theme="dark"] .bg-\[\#012169\]\/60,
+.dark .bg-\[\#012169\]\/40,
+.dark .bg-\[\#012169\]\/60 {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+}
+
+[data-theme="dark"] .dashboard-root .fixed.inset-0 .bg-white,
+.dark .dashboard-root .fixed.inset-0 .bg-white {
+  background: #121722 !important;
+  backdrop-filter: blur(32px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(190%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #f8fafc !important;
+  box-shadow: 0 28px 70px -10px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Modal Close Button */
+[data-theme="dark"] .dashboard-root .fixed.inset-0 button.bg-slate-100,
+[data-theme="dark"] .dashboard-root .fixed.inset-0 button.rounded-full.bg-slate-100,
+.dark .dashboard-root .fixed.inset-0 button.bg-slate-100,
+.dark .dashboard-root .fixed.inset-0 button.rounded-full.bg-slate-100 {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #f8fafc !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .dashboard-root .fixed.inset-0 button.bg-slate-100:hover,
+.dark .dashboard-root .fixed.inset-0 button.bg-slate-100:hover {
+  background: rgba(255, 255, 255, 0.14) !important;
+  color: #ffffff !important;
+}
+
+/* Role Selector Buttons in AuthModal */
+[data-theme="dark"] .dashboard-root .fixed.inset-0 button.border-2,
+.dark .dashboard-root .fixed.inset-0 button.border-2 {
+  background: rgba(22, 26, 36, 0.6) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  color: #f8fafc !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .dashboard-root .fixed.inset-0 button.border-2:hover,
+.dark .dashboard-root .fixed.inset-0 button.border-2:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45) !important;
+}
+
+[data-theme="dark"] .dashboard-root .fixed.inset-0 button.border-2 span,
+.dark .dashboard-root .fixed.inset-0 button.border-2 span {
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .dashboard-root .fixed.inset-0 button.border-2 span.opacity-80,
+.dark .dashboard-root .fixed.inset-0 button.border-2 span.opacity-80 {
+  color: #cbd5e1 !important;
+}
+
+/* Encrypted Telemetry & Badges in Modals */
+[data-theme="dark"] .dashboard-root .fixed.inset-0 .bg-emerald-50,
+.dark .dashboard-root .fixed.inset-0 .bg-emerald-50 {
+  background: rgba(16, 185, 129, 0.12) !important;
+  border-color: rgba(16, 185, 129, 0.28) !important;
+  color: #6ee7b7 !important;
+}
+
+[data-theme="dark"] .dashboard-root .fixed.inset-0 .bg-\[\#003087\]\/10,
+.dark .dashboard-root .fixed.inset-0 .bg-\[\#003087\]\/10 {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #f8fafc !important;
+}
+
+/* Tables & Dividers */
+[data-theme="dark"] .dashboard-root table thead tr,
+.dark .dashboard-root table thead tr {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .dashboard-root table tbody tr:hover,
+.dark .dashboard-root table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+[data-theme="dark"] .dashboard-root .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+[data-theme="dark"] .dashboard-root .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
+.dark .dashboard-root .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+.dark .dashboard-root .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Selection Highlights */
+[data-theme="dark"] ::selection,
+.dark ::selection {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+/* Custom Scrollbar */
+[data-theme="dark"] ::-webkit-scrollbar,
+.dark ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track,
+.dark ::-webkit-scrollbar-track {
+  background: #0b0e14;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb,
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover,
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+[data-theme="dark"] .dashboard-root table tbody tr:hover,
+.dark .dashboard-root table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+[data-theme="dark"] .dashboard-root .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+[data-theme="dark"] .dashboard-root .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
+.dark .dashboard-root .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+.dark .dashboard-root .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Selection Highlights */
+[data-theme="dark"] ::selection,
+.dark ::selection {
+  background-color: rgba(223, 202, 166, 0.25) !important;
+  color: #ffffff !important;
+}
+
+/* Custom Scrollbar for Luxury Dark Mode */
+[data-theme="dark"] ::-webkit-scrollbar,
+.dark ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track,
+.dark ::-webkit-scrollbar-track {
+  background: #0d0f13;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb,
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(223, 202, 166, 0.2);
+  border-radius: 4px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover,
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(223, 202, 166, 0.38);
+}
+
+/* ==========================================================================
+   Hand-drawn Scribble Animations
+   ========================================================================== */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(1.5deg);
+  }
+}
+
+@keyframes floatDelayed {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(-1.5deg);
+  }
+}
+
+@keyframes bounceSubtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes drawLine {
+  0% {
+    stroke-dashoffset: 120;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-float-slow {
+  animation: floatSlow 4s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: floatDelayed 4.5s ease-in-out 1s infinite;
+}
+
+.animate-bounce-subtle {
+  animation: bounceSubtle 2.5s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spinSlow 18s linear infinite;
+}
+
+.animate-draw-line {
+  stroke-dasharray: 120;
+  animation: drawLine 2s ease-out forwards;
+}
+
+

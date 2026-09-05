@@ -2,7 +2,8 @@ import React from 'react';
 import { useProperty } from '../context/PropertyContext';
 import {
   ScribbleChart,
-  ScribbleUsers
+  ScribbleUsers,
+  ScribbleFinanceIllustration
 } from './ScribbleIcons';
 import { Download, Receipt, Building, ArrowUpRight, TrendingUp } from 'lucide-react';
 
@@ -23,14 +24,13 @@ export const MoreView: React.FC = () => {
   return (
     <div className="space-y-8 font-sans">
       {/* Centered Top Header Block */}
-      <div className="text-center space-y-4 max-w-2xl mx-auto py-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#e0f2fe] text-[#003087] border border-[#009cde]/30 text-xs font-extrabold">
-          <ScribbleChart className="w-4 h-4 text-[#009cde]" />
-          <span>Audited Financial Intelligence</span>
+      <div className="text-center space-y-3.5 max-w-2xl mx-auto py-2">
+        <div className="flex justify-center">
+          <ScribbleFinanceIllustration className="w-12 h-12 text-[#003087] dark:text-[#f8fafc]" />
         </div>
 
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#012169]">Financial Accounting & P&L</h2>
-        <p className="text-xs sm:text-sm font-semibold text-slate-500">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#012169] dark:text-[#f8fafc] tracking-tight">Financial Accounting & P&L</h2>
+        <p className="text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400">
           Real-time rent roll ledgers, operating expense tracking, and tax statement generation
         </p>
 
@@ -38,7 +38,7 @@ export const MoreView: React.FC = () => {
         <div className="flex justify-center pt-2">
           <button
             onClick={handleDownloadPDF}
-            className="px-6 py-3 rounded-xl bg-[#009cde] hover:bg-[#0080b8] text-white font-extrabold text-xs sm:text-sm shadow-md flex items-center justify-center gap-2.5 transition-transform active:scale-95"
+            className="px-6 py-3 rounded-xl bg-[#009cde] hover:bg-[#0080b8] text-white font-extrabold text-xs sm:text-sm shadow-md flex items-center justify-center gap-2.5 transition-transform active:scale-95 cursor-pointer"
           >
             <Download className="w-4 h-4 stroke-[2.5]" />
             <span>Export P&L Statement (PDF)</span>
@@ -127,7 +127,7 @@ export const MoreView: React.FC = () => {
               <Receipt className="w-5 h-5 text-[#003087]" />
               <h3 className="text-base sm:text-lg font-extrabold text-[#012169]">Recent Expenses Ledger</h3>
             </div>
-            <span className="text-xs font-extrabold text-[#003087] bg-[#e0f2fe] px-3 py-1 rounded-full border border-[#009cde]/30">
+            <span className="text-xs font-extrabold text-[#003087] bg-[#f0f7ff] px-3 py-1 rounded-xl border border-[#009cde]/30">
               {expenses.length} Records
             </span>
           </div>
@@ -171,7 +171,7 @@ export const MoreView: React.FC = () => {
                 <div className="text-sm font-extrabold text-[#012169]">{u.name}</div>
                 <div className="text-xs font-semibold text-slate-400">{u.email}</div>
               </div>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-[#e0f2fe] text-[#003087] border border-[#009cde]/30 flex-shrink-0">
+              <span className="px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold uppercase bg-[#f0f7ff] text-[#003087] border border-[#009cde]/30 flex-shrink-0">
                 {u.role}
               </span>
             </div>

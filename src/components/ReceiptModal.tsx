@@ -44,10 +44,10 @@ export const ReceiptModal: React.FC = () => {
         </button>
 
         <div className="text-center pt-2 space-y-1">
-          <div className="w-14 h-14 mx-auto rounded-full bg-[#e0f2fe] border border-[#009cde]/30 text-[#003087] flex items-center justify-center mb-3 shadow-xs">
-            <CheckCircle2 className="w-7 h-7 text-[#009cde] stroke-[2.5]" />
+          <div className="w-14 h-14 mx-auto rounded-2xl bg-[#f0f7ff] border border-[#009cde]/30 text-[#003087] flex items-center justify-center mb-3 shadow-2xs">
+            <CheckCircle2 className="w-7 h-7 text-[#009cde] stroke-[2.2]" />
           </div>
-          <h3 className="text-xl font-extrabold text-[#012169]">Payment Received!</h3>
+          <h3 className="text-xl font-extrabold text-[#012169]">Payment Received</h3>
           <p className="text-xs text-[#009cde] font-extrabold">Receipt {payment.receiptNumber}</p>
         </div>
 
@@ -72,7 +72,7 @@ export const ReceiptModal: React.FC = () => {
             </div>
             <div className="flex justify-between text-xs items-center">
               <span className="text-slate-500 font-semibold">Payment Mode</span>
-              <span className="px-2.5 py-0.5 rounded-full bg-[#e0f2fe] text-[#003087] border border-[#009cde]/30 text-[10px] font-extrabold">
+              <span className="px-2.5 py-0.5 rounded-md bg-[#f0f7ff] text-[#003087] border border-[#009cde]/30 text-[10px] font-extrabold">
                 {payment.method}
               </span>
             </div>

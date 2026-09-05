@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useProperty } from '../context/PropertyContext';
-import { ChevronRight, X, PhoneCall } from 'lucide-react';
+import {
+  ScribbleBuilding,
+  ScribbleChevron
+} from './ScribbleIcons';
+import { X, PhoneCall } from 'lucide-react';
 
-export const StatusStrip: React.FC = () => {
+const formatCurrency = (val: number) => '₹' + val.toLocaleString('en-IN');
+
+export const StatusStrip: React.FC = React.memo(() => {
   const {
     filteredMetrics,
     setIsAgingModalOpen,
@@ -15,102 +21,109 @@ export const StatusStrip: React.FC = () => {
 
   const [activeModal, setActiveModal] = useState<'vacant' | 'occupied' | null>(null);
 
-  const formatCurrency = (val: number) => '₹' + val.toLocaleString('en-IN');
+  const activeUnits = useMemo(() => {
+    return selectedPropertyId === 'all'
+      ? units
+      : units.filter(u => u.propertyId === selectedPropertyId);
+  }, [units, selectedPropertyId]);
 
-  const activeUnits = selectedPropertyId === 'all'
-    ? units
-    : units.filter(u => u.propertyId === selectedPropertyId);
+  const vacantUnitsList = useMemo(() => {
+    return activeUnits.filter(u => u.status === 'vacant');
+  }, [activeUnits]);
 
-  const vacantUnitsList = activeUnits.filter(u => u.status === 'vacant');
+  const handleOpenAging = useCallback(() => setIsAgingModalOpen(true), [setIsAgingModalOpen]);
+  const handleOpenVacant = useCallback(() => setActiveModal('vacant'), []);
+  const handleOpenOccupied = useCallback(() => setActiveModal('occupied'), []);
+  const handleOpenComplaints = useCallback(() => setActiveTab('complaints'), [setActiveTab]);
+  const handleCloseModal = useCallback(() => setActiveModal(null), []);
+
+  const totalDuesFormatted = useMemo(() => formatCurrency(filteredMetrics.totalDuesAllTime), [filteredMetrics.totalDuesAllTime]);
 
   return (
-    <div className="space-y-4 font-sans">
+    <div className="space-y-3.5 font-sans">
       <div className="flex items-center justify-between">
-        <h2 className="text-base sm:text-lg font-extrabold text-[#012169]">
-          Operational Status Overview
+        <h2 className="text-sm sm:text-base font-extrabold text-[#012169] dark:text-[#f8fafc] flex items-center gap-2">
+          <ScribbleBuilding className="w-4 h-4 text-[#009cde]" />
+          <span>Operational Status Overview</span>
         </h2>
-        <span className="text-xs font-bold text-slate-400">Real-time Telemetry</span>
+        <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500">Real-time Telemetry</span>
       </div>
 
-      {/* 4 Minimal, Bespoke Stat Tiles */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+      {/* 4 Minimal, Bespoke Stat Tiles - 4x Spacing for Compact Card Widths */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10 lg:gap-14 xl:gap-16 w-full">
         {/* All-Time Dues Tile */}
         <div
-          onClick={() => setIsAgingModalOpen(true)}
-          className="bg-white border border-slate-200/80 rounded-2xl p-5 cursor-pointer group hover:border-[#009cde] hover:shadow-md transition-all space-y-3"
+          onClick={handleOpenAging}
+          className="bg-transparent dark:bg-transparent rounded-xl p-3.5 sm:p-4 cursor-pointer group status-stat-card shadow-none hover:border-slate-300 dark:hover:border-white/[0.16] transition-all duration-200 w-full min-h-[108px] sm:min-h-[116px] flex flex-col justify-between items-center text-center"
         >
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">All-Time Dues</span>
-            <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+          <div className="text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center w-full">
+            All-Time Dues
           </div>
 
-          <div className="text-2xl sm:text-3xl font-extrabold text-[#012169] font-mono-amount tracking-tight">
-            {formatCurrency(filteredMetrics.totalDuesAllTime)}
+          <div className="text-base sm:text-lg lg:text-xl font-extrabold text-[#012169] dark:text-[#f8fafc] font-mono-amount tracking-tight my-1 text-center w-full">
+            {totalDuesFormatted}
           </div>
 
-          <div className="flex items-center justify-between text-xs font-extrabold text-[#009cde] pt-2 border-t border-slate-100">
+          <div className="flex items-center justify-center gap-1 text-[10px] font-extrabold text-[#009cde] pt-0.5 w-full">
             <span>Aging Report</span>
-            <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            <ScribbleChevron className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
           </div>
         </div>
 
         {/* Vacant Units Tile */}
         <div
-          onClick={() => setActiveModal('vacant')}
-          className="bg-white border border-slate-200/80 rounded-2xl p-5 cursor-pointer group hover:border-[#009cde] hover:shadow-md transition-all space-y-3"
+          onClick={handleOpenVacant}
+          className="bg-transparent dark:bg-transparent rounded-xl p-3.5 sm:p-4 cursor-pointer group status-stat-card shadow-none hover:border-slate-300 dark:hover:border-white/[0.16] transition-all duration-200 w-full min-h-[108px] sm:min-h-[116px] flex flex-col justify-between items-center text-center"
         >
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Vacant Units</span>
-            <span className="w-2 h-2 rounded-full bg-amber-500" />
+          <div className="text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center w-full">
+            Vacant Units
           </div>
 
-          <div className="text-2xl sm:text-3xl font-extrabold text-[#012169] font-mono-amount tracking-tight">
-            {filteredMetrics.vacantUnitsCount} <span className="text-xs font-bold text-slate-400">/ {filteredMetrics.totalUnitsCount}</span>
+          <div className="text-base sm:text-lg lg:text-xl font-extrabold text-[#012169] dark:text-[#f8fafc] font-mono-amount tracking-tight my-1 text-center w-full">
+            {filteredMetrics.vacantUnitsCount} <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500">/ {filteredMetrics.totalUnitsCount}</span>
           </div>
 
-          <div className="flex items-center justify-between text-xs font-extrabold text-[#009cde] pt-2 border-t border-slate-100">
+          <div className="flex items-center justify-center gap-1 text-[10px] font-extrabold text-[#009cde] pt-0.5 w-full">
             <span>Fill Units</span>
-            <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            <ScribbleChevron className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
           </div>
         </div>
 
         {/* Occupied Units Tile */}
         <div
-          onClick={() => setActiveModal('occupied')}
-          className="bg-white border border-slate-200/80 rounded-2xl p-5 cursor-pointer group hover:border-[#009cde] hover:shadow-md transition-all space-y-3"
+          onClick={handleOpenOccupied}
+          className="bg-transparent dark:bg-transparent rounded-xl p-3.5 sm:p-4 cursor-pointer group status-stat-card shadow-none hover:border-slate-300 dark:hover:border-white/[0.16] transition-all duration-200 w-full min-h-[108px] sm:min-h-[116px] flex flex-col justify-between items-center text-center"
         >
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Occupied Units</span>
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+          <div className="text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center w-full">
+            Occupied Units
           </div>
 
-          <div className="text-2xl sm:text-3xl font-extrabold text-[#012169] font-mono-amount tracking-tight">
-            {filteredMetrics.occupiedUnitsCount} <span className="text-xs font-bold text-slate-400">({filteredMetrics.occupancyRatePct}%)</span>
+          <div className="text-base sm:text-lg lg:text-xl font-extrabold text-[#012169] dark:text-[#f8fafc] font-mono-amount tracking-tight my-1 text-center w-full">
+            {filteredMetrics.occupiedUnitsCount} <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500">({filteredMetrics.occupancyRatePct}%)</span>
           </div>
 
-          <div className="flex items-center justify-between text-xs font-extrabold text-[#009cde] pt-2 border-t border-slate-100">
+          <div className="flex items-center justify-center gap-1 text-[10px] font-extrabold text-[#009cde] pt-0.5 w-full">
             <span>View Tenants</span>
-            <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            <ScribbleChevron className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
           </div>
         </div>
 
         {/* Pending Issues Tile */}
         <div
-          onClick={() => setActiveTab('complaints')}
-          className="bg-white border border-slate-200/80 rounded-2xl p-5 cursor-pointer group hover:border-[#009cde] hover:shadow-md transition-all space-y-3"
+          onClick={handleOpenComplaints}
+          className="bg-transparent dark:bg-transparent rounded-xl p-3.5 sm:p-4 cursor-pointer group status-stat-card shadow-none hover:border-slate-300 dark:hover:border-white/[0.16] transition-all duration-200 w-full min-h-[108px] sm:min-h-[116px] flex flex-col justify-between items-center text-center"
         >
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Pending Issues</span>
-            <span className="w-2 h-2 rounded-full bg-[#009cde]" />
+          <div className="text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center w-full">
+            Pending Issues
           </div>
 
-          <div className="text-2xl sm:text-3xl font-extrabold text-[#012169] font-mono-amount tracking-tight">
-            {filteredMetrics.pendingComplaintsCount} <span className="text-xs font-bold text-slate-400">tickets</span>
+          <div className="text-base sm:text-lg lg:text-xl font-extrabold text-[#012169] dark:text-[#f8fafc] font-mono-amount tracking-tight my-1 text-center w-full">
+            {filteredMetrics.pendingComplaintsCount} <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500">tickets</span>
           </div>
 
-          <div className="flex items-center justify-between text-xs font-extrabold text-[#009cde] pt-2 border-t border-slate-100">
+          <div className="flex items-center justify-center gap-1 text-[10px] font-extrabold text-[#009cde] pt-0.5 w-full">
             <span>Complaints Tab</span>
-            <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            <ScribbleChevron className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
           </div>
         </div>
       </div>
@@ -124,7 +137,7 @@ export const StatusStrip: React.FC = () => {
                 <h3 className="text-lg font-extrabold text-[#012169]">Vacant Rooms & Flats</h3>
                 <p className="text-xs sm:text-sm text-slate-500 font-semibold">{vacantUnitsList.length} units available to rent</p>
               </div>
-              <button onClick={() => setActiveModal(null)} className="p-2.5 rounded-xl bg-slate-100 text-[#012169] hover:bg-slate-200">
+              <button onClick={handleCloseModal} className="p-2.5 rounded-xl bg-slate-100 text-[#012169] hover:bg-slate-200">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -152,7 +165,7 @@ export const StatusStrip: React.FC = () => {
                         <div className="text-base font-extrabold text-[#003087] font-mono-amount">{formatCurrency(unit.rentAmount)} /mo</div>
                         <button
                           onClick={() => {
-                            setActiveModal(null);
+                            handleCloseModal();
                             setActiveTab('properties');
                           }}
                           className="mt-2 px-4 py-1.5 rounded-xl bg-[#009cde] text-white font-extrabold text-xs hover:bg-[#0080b8] shadow-sm"
@@ -178,7 +191,7 @@ export const StatusStrip: React.FC = () => {
                 <h3 className="text-lg font-extrabold text-[#012169]">Active Tenants & Occupancy</h3>
                 <p className="text-xs sm:text-sm text-[#009cde] font-semibold">{tenants.length} tenants currently residing</p>
               </div>
-              <button onClick={() => setActiveModal(null)} className="p-2.5 rounded-xl bg-slate-100 text-[#012169] hover:bg-slate-200">
+              <button onClick={handleCloseModal} className="p-2.5 rounded-xl bg-slate-100 text-[#012169] hover:bg-slate-200">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -213,4 +226,5 @@ export const StatusStrip: React.FC = () => {
       )}
     </div>
   );
-};
+});
+

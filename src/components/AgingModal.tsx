@@ -80,14 +80,14 @@ export const AgingModal: React.FC = () => {
                 <div className="flex items-center gap-4">
                   <div className="text-right">
                     <div className="text-sm font-extrabold text-[#003087] font-mono-amount">{formatCurrency(t.outstandingDueAmount)}</div>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-100 text-amber-800">
+                    <span className="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-amber-50 text-amber-800 border border-amber-200">
                       OVERDUE
                     </span>
                   </div>
 
                   <button
                     onClick={() => sendWhatsAppNudge(t.name, t.phone, t.outstandingDueAmount)}
-                    className="p-2.5 rounded-xl bg-[#009cde] hover:bg-[#0080b8] text-white shadow-xs"
+                    className="p-2.5 rounded-xl bg-[#009cde] hover:bg-[#0080b8] text-white shadow-xs cursor-pointer active:scale-95 transition-transform"
                     title="Send WhatsApp Nudge"
                   >
                     <MessageCircle className="w-4 h-4" />

@@ -3,7 +3,8 @@ import { useProperty } from '../context/PropertyContext';
 import {
   ScribbleBuilding,
   ScribblePlus,
-  ScribbleQR
+  ScribbleQR,
+  ScribblePropertyIllustration
 } from './ScribbleIcons';
 import { ChevronDown, ChevronUp, MapPin, UserPlus, PhoneCall, CreditCard } from 'lucide-react';
 
@@ -38,11 +39,11 @@ export const PropertiesView: React.FC = () => {
     <div className="space-y-8 font-sans">
       {/* Top Title & Centered Actions */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-        <div className="flex items-center gap-3 justify-center sm:justify-start">
-          <ScribbleBuilding className="w-6 h-6 text-[#003087] stroke-[2.4] flex-shrink-0" />
+        <div className="flex items-center gap-3.5 justify-center sm:justify-start">
+          <ScribblePropertyIllustration className="w-10 h-10 text-[#003087] dark:text-[#f8fafc] flex-shrink-0" />
           <div>
-            <h2 className="text-xl sm:text-2xl font-extrabold text-[#012169]">Properties & Units Directory</h2>
-            <p className="text-xs sm:text-sm font-semibold text-slate-500">Portfolio buildings, floors, rooms, and tenant allocations</p>
+            <h2 className="text-xl sm:text-2xl font-extrabold text-[#012169] dark:text-[#f8fafc] tracking-tight">Properties & Units Directory</h2>
+            <p className="text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400">Portfolio buildings, floors, rooms, and tenant allocations</p>
           </div>
         </div>
 
@@ -95,7 +96,7 @@ export const PropertiesView: React.FC = () => {
                     </div>
                   </div>
 
-                  <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-[#e0f2fe] text-[#003087] border border-[#009cde]/30 flex-shrink-0">
+                  <span className="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-[#f0f7ff] text-[#003087] border border-[#009cde]/30 flex-shrink-0">
                     Active Property
                   </span>
                 </div>
@@ -121,7 +122,7 @@ export const PropertiesView: React.FC = () => {
               {/* Integrated Bottom Accordion Bar */}
               <button
                 onClick={() => setExpandedPropId(isExpanded ? null : property.id)}
-                className="w-full py-3.5 px-6 bg-slate-50 hover:bg-[#f0f7ff] border-t border-slate-100 flex items-center justify-between transition-colors text-xs sm:text-sm font-extrabold text-[#003087]"
+                className="w-full py-3.5 px-6 bg-slate-50 hover:bg-[#f0f7ff] border-t border-slate-100 flex items-center justify-between transition-colors text-xs sm:text-sm font-extrabold text-[#003087] cursor-pointer"
               >
                 <div className="flex items-center gap-2.5">
                   <ScribbleBuilding className="w-4 h-4 text-[#009cde] stroke-[2.2]" />
@@ -152,7 +153,7 @@ export const PropertiesView: React.FC = () => {
                         >
                           <div className="flex items-center justify-between">
                             <span className="text-sm sm:text-base font-extrabold text-[#012169]">{unit.unitNumber}</span>
-                            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${
+                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-extrabold ${
                               isVacant ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-emerald-100 text-emerald-900 border border-emerald-300'
                             }`}>
                               {isVacant ? 'VACANT' : 'OCCUPIED'}

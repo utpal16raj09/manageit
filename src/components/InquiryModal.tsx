@@ -42,7 +42,7 @@ export const InquiryModal: React.FC = () => {
         {!isSuccess && (
           <button
             onClick={() => setIsInquiryModalOpen(false)}
-            className="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:text-slate-700 flex items-center justify-center text-sm font-bold transition-colors"
+            className="absolute top-5 right-5 w-8 h-8 rounded-xl bg-slate-100 text-slate-400 hover:text-slate-700 hover:bg-slate-200 flex items-center justify-center text-sm font-bold transition-colors cursor-pointer"
           >
             ✕
           </button>
@@ -50,8 +50,8 @@ export const InquiryModal: React.FC = () => {
 
         {isSuccess ? (
           <div className="flex flex-col items-center justify-center py-10 space-y-4 text-center animate-in fade-in zoom-in duration-300">
-            <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center">
-              <CheckCircle2 className="w-8 h-8" />
+            <div className="w-14 h-14 bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-2xl flex items-center justify-center">
+              <CheckCircle2 className="w-8 h-8 stroke-[2]" />
             </div>
             <div>
               <h3 className="text-2xl font-black text-[#012169]">Inquiry Sent</h3>

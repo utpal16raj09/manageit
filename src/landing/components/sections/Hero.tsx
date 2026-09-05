@@ -1,190 +1,138 @@
 import React, { useState } from 'react';
 import { useProperty } from '../../../context/PropertyContext';
-import { LaunchButton } from '../ui/LaunchButton';
-import { Container } from '../ui/Container';
+import { ScribbleSearch, ScribbleBuilding } from '../../../components/ScribbleIcons';
 import { AuthModal } from '../../../components/AuthModal';
-import { 
-  Play, 
-  ArrowRight,
-  Home,
-  Building,
-  Building2
-} from 'lucide-react';
 
 export const Hero: React.FC = () => {
-  const { setActiveTab, setIsInquiryModalOpen } = useProperty();
+  const { setActiveTab } = useProperty();
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilters, setActiveFilters] = useState<string[]>(['Apartments', 'Villas', 'Commercial', 'Suites']);
+
+  const filterOptions = ['Apartments', 'Villas', 'Commercial', 'Suites'];
+
+  const toggleFilter = (filter: string) => {
+    setActiveFilters(prev => 
+      prev.includes(filter) ? prev.filter(f => f !== filter) : [...prev, filter]
+    );
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsAuthOpen(true);
+  };
 
   return (
     <>
-      <section id="overview" className="relative flex flex-col justify-between pt-16 sm:pt-28 pb-12 sm:pb-16 bg-[#FAFAFA] overflow-hidden">
-        
-        {/* Soft Blue Diffuse Radial Glow */}
-        <div className="absolute top-1/4 -right-20 w-[350px] sm:w-[700px] h-[350px] sm:h-[700px] bg-[#003087]/10 rounded-full blur-[100px] sm:blur-[140px] pointer-events-none" />
-
-        <Container className="relative z-10 my-auto w-full max-w-[1550px] px-4 sm:px-6">
-          
-          {/* Main Hero Layout Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center pt-6 sm:pt-14">
+      <section className="relative min-h-[calc(100svh-68px)] lg:min-h-[calc(100vh-76px)] flex items-center pt-6 sm:pt-8 lg:pt-10 pb-14 sm:pb-16 lg:pb-24 bg-[#FBFBFA] overflow-hidden font-sans">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 sm:gap-10 lg:gap-16 items-center">
             
-            {/* LEFT COLUMN — Editorial Content */}
-            <div className="lg:col-span-5 space-y-5 sm:space-y-6 text-center sm:text-left flex flex-col items-center sm:items-start">
-              
-              {/* Display Headline */}
-              <h1 className="font-display font-normal text-slate-900 text-4xl sm:text-6xl lg:text-[72px] leading-[1.02] sm:leading-[0.98] tracking-tight">
-                Rent collection<br className="hidden sm:inline" />
-                {' '}that <span className="italic font-serif text-[#003087]">runs</span> itself.
-              </h1>
+            {/* HERO IMAGE CARD: Top on mobile (order-1), Right on desktop (lg:order-2) */}
+            <div className="order-1 lg:order-2 lg:col-span-6 relative">
+              <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl border border-slate-200/80 bg-white">
+                <img
+                  src="/assets/hero-building.jpg"
+                  alt="Modern Luxury Architectural Building"
+                  className="w-full h-[260px] sm:h-[380px] lg:h-[620px] object-cover object-center transform hover:scale-102 transition-transform duration-700"
+                />
 
-              {/* Subhead Paragraph */}
-              <p className="text-slate-500 text-sm sm:text-lg leading-relaxed font-normal max-w-md mx-auto sm:mx-0">
-                Real-time rent roll tracking, automated dues radar, dynamic QR onboarding, and instant P&amp;L — built for landlords managing more than one roof.
-              </p>
-
-              {/* MOBILE ONLY: PROPORTIONATELY COMPACT DUAL MOCKUPS */}
-              <div className="block lg:hidden w-full my-3">
-                <div className="relative w-full max-w-[290px] sm:max-w-[420px] mx-auto py-1">
-                  <div className="absolute inset-0 bg-[#003087]/10 rounded-full blur-lg pointer-events-none" />
-                  
-                  {/* Laptop Mockup */}
-                  <div className="relative ml-auto w-[85%] z-10">
-                    <img
-                      src="/assets/imhlap-clean.png"
-                      alt="PropPulse Laptop Dashboard"
-                      className="w-full h-auto block select-none drop-shadow-[0_8px_20px_rgba(0,48,135,0.14)]"
-                      draggable={false}
-                    />
-                  </div>
-
-                  {/* Phone Mockup */}
-                  <div className="absolute left-0 bottom-[-4px] w-[34%] z-30">
-                    <img
-                      src="/assets/photoroom-phone-clean.png"
-                      alt="PropPulse Mobile Phone App"
-                      className="w-full h-auto block select-none drop-shadow-[0_10px_22px_rgba(0,48,135,0.22)]"
-                      draggable={false}
-                    />
+                {/* Top-right Handwritten Script Note */}
+                <div className="absolute top-4 right-4 sm:top-6 sm:right-6 text-right pointer-events-none select-none drop-shadow-md">
+                  <div className="font-serif italic text-base sm:text-2xl lg:text-3xl text-white font-bold leading-none tracking-wide [text-shadow:_0_2px_12px_rgba(0,0,0,0.6)]">
+                    Better<br />spaces.<br />Better<br />returns.
                   </div>
                 </div>
-              </div>
 
-              {/* Action Buttons — SIDE BY SIDE */}
-              <div className="flex flex-row items-center justify-center sm:justify-start gap-2.5 sm:gap-4 w-full sm:w-auto pt-1">
-                <button
-                  onClick={() => setIsInquiryModalOpen(true)}
-                  className="flex-1 sm:flex-none bg-[#003087] hover:bg-[#012169] text-white px-5 sm:px-7 py-3.5 sm:py-4 rounded-full font-bold text-xs sm:text-sm transition-all duration-200 shadow-md flex items-center justify-center space-x-1.5 sm:space-x-2 cursor-pointer active:scale-95 whitespace-nowrap"
-                >
-                  <span>Inquire Now</span>
-                  <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                </button>
-                
-                <a
-                  href="#how-it-works"
-                  className="flex-1 sm:flex-none px-4 sm:px-6 py-3.5 sm:py-4 rounded-full border border-slate-200 bg-white text-[#012169] font-bold text-xs sm:text-sm flex items-center justify-center space-x-1.5 sm:space-x-2.5 hover:border-[#003087] transition-all shadow-2xs whitespace-nowrap"
-                >
-                  <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#009cde]/10 flex items-center justify-center text-[#003087] shrink-0">
-                    <Play className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current ml-0.5" />
+                {/* Bottom-right Verified Listings Badge with Scribble Building */}
+                <div className="absolute bottom-3.5 right-3.5 sm:bottom-5 sm:right-5 bg-white/95 backdrop-blur-md px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl sm:rounded-2xl border border-slate-200/90 shadow-lg sm:shadow-xl flex items-center space-x-2.5 sm:space-x-3">
+                  <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-[#f0f7ff] border border-[#009cde]/30 flex items-center justify-center text-[#003087] flex-shrink-0">
+                    <ScribbleBuilding className="w-3.5 h-3.5 sm:w-5 sm:h-5 stroke-[2.2]" />
                   </div>
-                  <span>See how it works</span>
-                </a>
-              </div>
-
-              {/* Text Below Buttons */}
-              <p className="text-xs sm:text-sm font-mono text-slate-400 font-medium">
-                Launching soon · Be first to know when we launch — no spam, just a heads-up.
-              </p>
-
-            </div>
-
-            {/* DESKTOP ONLY: DUAL MOCKUPS IN RIGHT COLUMN */}
-            <div className="hidden lg:flex lg:col-span-7 justify-end">
-              <div className="relative w-full max-w-[660px] py-4">
-                
-                {/* Soft Backdrop Diffuse Glow */}
-                <div className="absolute inset-0 bg-[#003087]/12 rounded-full blur-3xl pointer-events-none" />
-
-                {/* 1. LAPTOP MOCKUP (IMHLAP.png) */}
-                <div className="relative ml-auto w-[88%] z-10">
-                  <img
-                    src="/assets/imhlap-clean.png"
-                    alt="PropPulse Laptop Executive Dashboard"
-                    className="w-full h-auto block select-none drop-shadow-[0_25px_50px_rgba(0,48,135,0.16)]"
-                    draggable={false}
-                  />
+                  <div className="text-left">
+                    <div className="text-[10px] sm:text-xs font-black text-[#012169] tracking-tight">Verified Listings</div>
+                    <div className="text-[8.5px] sm:text-[10px] font-semibold text-slate-500">Safe &amp; Trusted</div>
+                  </div>
                 </div>
-
-                {/* 2. PHONE MOCKUP (image-Photoroom.png) */}
-                <div className="absolute left-0 bottom-[-10px] w-[34%] z-30">
-                  <img
-                    src="/assets/photoroom-phone-clean.png"
-                    alt="PropPulse Mobile Phone App"
-                    className="w-full h-auto block select-none drop-shadow-[0_30px_60px_rgba(0,48,135,0.28)]"
-                    draggable={false}
-                  />
-                </div>
-
               </div>
             </div>
 
-          </div>
-
-          {/* UNBOXED DESKTOP UNITS SECTION & MOBILE 'BUILT FOR LANDLORDS' STATEMENT */}
-          <div className="mt-16 sm:mt-32 pt-4 sm:pt-6">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
+            {/* EDITORIAL CONTENT & INTERACTIVE SEARCH: Below image on mobile (order-2), Left on desktop (lg:order-1) */}
+            <div className="order-2 lg:order-1 lg:col-span-6 flex flex-col space-y-5 sm:space-y-6 lg:space-y-8 text-left">
               
-              {/* Main Statement */}
-              <div className="text-center sm:text-left">
-                <p className="text-lg sm:text-2xl font-display font-semibold text-slate-800 leading-snug">
-                  Built for landlords managing <span className="font-bold text-[#003087]">2</span>, <span className="font-bold text-[#003087]">10</span>, or <span className="font-bold text-[#003087]">50+</span> properties.
+              {/* Interactive Search Bar: First after image on mobile, below subtitle on desktop */}
+              <form onSubmit={handleSearch} className="order-1 lg:order-4 relative max-w-lg pt-1">
+                <div className="relative flex items-center bg-white rounded-full border border-slate-300 shadow-sm p-1.5 sm:p-2 pl-4 sm:pl-5 focus-within:border-[#003087] focus-within:ring-2 focus-within:ring-[#003087]/15 focus-within:shadow-md transition-all">
+                  <ScribbleSearch className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400 mr-2.5 sm:mr-3 flex-shrink-0" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search by location, property or tenant..."
+                    className="w-full bg-transparent text-xs sm:text-sm text-[#012169] placeholder:text-slate-400 font-medium focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#003087] hover:bg-[#012169] text-white flex items-center justify-center flex-shrink-0 transition-colors cursor-pointer shadow-xs active:scale-95"
+                    title="Search"
+                  >
+                    <ScribbleSearch className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  </button>
+                </div>
+              </form>
+
+              {/* Quick Filter Checklist: Second on mobile, fifth on desktop */}
+              <div className="order-2 lg:order-5 flex flex-wrap items-center gap-x-4 gap-y-2 sm:gap-6 lg:gap-7 pt-1 text-xs sm:text-sm font-semibold text-slate-700">
+                {filterOptions.map(opt => {
+                  const isChecked = activeFilters.includes(opt);
+                  return (
+                    <button
+                      key={opt}
+                      type="button"
+                      onClick={() => toggleFilter(opt)}
+                      className="flex items-center space-x-1.5 hover:text-[#003087] cursor-pointer transition-colors select-none py-0.5"
+                    >
+                      <span className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded flex items-center justify-center text-[10px] sm:text-[11px] font-black transition-colors ${
+                        isChecked ? 'text-[#003087]' : 'text-slate-300'
+                      }`}>
+                        ✓
+                      </span>
+                      <span>{opt}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Category Lead Title & Main Headline: Third on mobile, first on desktop */}
+              <div className="order-3 lg:order-1 space-y-2 sm:space-y-3 pt-1">
+                <div className="text-[10px] sm:text-[11px] font-mono font-bold tracking-[0.2em] sm:tracking-[0.24em] text-[#003087] uppercase">
+                  PROPERTY &amp; TENANT OPERATIONS
+                </div>
+
+                <h1 className="font-display font-normal text-[#012169] text-3xl sm:text-5xl lg:text-[72px] leading-[1.1] sm:leading-[1.06] lg:leading-[1.04] tracking-tight">
+                  Find the right<br />
+                  space, <span className="italic font-serif text-[#003087]">faster.</span>
+                </h1>
+              </div>
+
+              {/* Subtitle Description: Fourth on mobile, second on desktop */}
+              <div className="order-4 lg:order-2 pt-0.5">
+                <p className="text-slate-600 text-xs sm:text-base lg:text-lg leading-relaxed max-w-lg font-medium">
+                  Premium rental properties, built for long-term growth. Manage your tenants, track payments and more — all in one place.
                 </p>
               </div>
 
-              {/* Seamless Unboxed Tier Indicators — DESKTOP ONLY */}
-              <div className="hidden sm:flex flex-row items-center justify-end gap-8 sm:gap-12">
-                
-                {/* 2-10 Units */}
-                <div className="flex items-center space-x-3.5">
-                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#009cde]/10 flex items-center justify-center text-[#003087] shrink-0">
-                    <Home className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                  <div className="text-left">
-                    <div className="text-sm sm:text-base font-extrabold text-[#012169]">2–10 Units</div>
-                    <div className="text-[10px] sm:text-xs font-mono text-slate-400">Independent Landlords</div>
-                  </div>
-                </div>
-
-                {/* 10-50 Units */}
-                <div className="flex items-center space-x-3.5">
-                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#003087]/10 flex items-center justify-center text-[#003087] shrink-0">
-                    <Building className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                  <div className="text-left">
-                    <div className="text-sm sm:text-base font-extrabold text-[#012169]">10–50 Units</div>
-                    <div className="text-[10px] sm:text-xs font-mono text-slate-400">Multi-Roof Portfolios</div>
-                  </div>
-                </div>
-
-                {/* 50+ Units */}
-                <div className="flex items-center space-x-3.5">
-                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 shrink-0">
-                    <Building2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                  <div className="text-left">
-                    <div className="text-sm sm:text-base font-extrabold text-[#012169]">50+ Units</div>
-                    <div className="text-[10px] sm:text-xs font-mono text-slate-400">Commercial &amp; Residential</div>
-                  </div>
-                </div>
-
-              </div>
-
             </div>
-          </div>
 
-        </Container>
+          </div>
+        </div>
       </section>
 
-      {/* Login Authentication Modal */}
+      {/* Auth Modal Trigger */}
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </>
   );
 };
+
+
+

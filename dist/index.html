@@ -9,8 +9,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-B80jf-0F.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-hxCzFBMK.css">
+    <script>
+      (function() {
+        try {
+          var theme = localStorage.getItem('proppulse_theme');
+          if (theme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-GCUKH4Tb.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-D4JFtg0Q.css">
   </head>
   <body class="bg-[#f0f4f9] text-slate-900 font-sans antialiased selection:bg-blue-600 selection:text-white">
     <div id="root"></div>

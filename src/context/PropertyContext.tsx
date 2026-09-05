@@ -26,6 +26,8 @@ export type TabType = 'landing' | 'dashboard' | 'manager-dashboard' | 'tenant-da
 
 export type RoleType = 'owner' | 'manager' | 'tenant' | null;
 
+export type ThemeType = 'light' | 'dark';
+
 interface PropertyContextType {
   // Navigation & Filtering
   selectedPropertyId: string;
@@ -95,6 +97,11 @@ interface PropertyContextType {
   // Offline Simulator
   isOffline: boolean;
   toggleOffline: () => void;
+
+  // Theme Management
+  theme: ThemeType;
+  toggleTheme: () => void;
+  setTheme: (theme: ThemeType) => void;
 }
 
 const PropertyContext = createContext<PropertyContextType | undefined>(undefined);
@@ -122,6 +129,43 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
 
   const [isOffline, setIsOffline] = useState(false);
+
+  // Theme State
+  const [theme, setThemeState] = useState<ThemeType>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('proppulse_theme');
+      if (saved === 'dark' || saved === 'light') return saved;
+    }
+    return 'light';
+  });
+
+  const setTheme = (newTheme: ThemeType) => {
+    setThemeState(newTheme);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('proppulse_theme', newTheme);
+      if (newTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  };
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
+  React.useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
 
   // Entities (Initialized empty/mock, will be hydrated by DB)
   const [properties, setProperties] = useState<Property[]>([]);
@@ -619,7 +663,10 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         addBulkDues,
         sendAnnouncement,
         isOffline,
-        toggleOffline
+        toggleOffline,
+        theme,
+        toggleTheme,
+        setTheme
       }}
     >
       {children}

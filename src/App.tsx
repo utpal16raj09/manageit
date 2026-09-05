@@ -32,7 +32,7 @@ const AppContent: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f4f7fa] flex text-[#012169] font-sans antialiased selection:bg-[#009cde] selection:text-white">
+    <div className="min-h-screen bg-[#f4f7fa] flex text-[#012169] font-sans antialiased selection:bg-[#009cde] selection:text-white dashboard-root">
       {/* Desktop Sidebar */}
       <DesktopSidebar />
 
@@ -40,9 +40,9 @@ const AppContent: React.FC = () => {
       <div className="flex-1 flex flex-col min-w-0 pb-28 lg:pb-12 lg:pl-64">
         <Header />
 
-        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
+        <main className="flex-1 max-w-7xl w-full mx-auto px-8 sm:px-12 lg:px-16 xl:px-20 py-5 sm:py-6 space-y-6">
           {activeTab === 'dashboard' && (
-            <div className="space-y-8 animate-in fade-in duration-300">
+            <div className="space-y-5 sm:space-y-6 animate-in fade-in duration-300">
               <DashboardGreeting />
               <MoneyStrip />
               <StatusStrip />
